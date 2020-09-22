@@ -1,0 +1,71 @@
+/** Dinamic pup-up style file **/
+
+.dnmcppp-frame {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: rgba(33, 37, 41, 0.3);
+    z-index: 1000;
+}
+
+.dnmcppp-container-shell {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+.dnmcppp-container {
+    position: absolute;
+    width: 600px;
+    height: 380px;
+    background: #fff;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+}
+
+.dnmcppp-container-full {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0 !important;
+}
+
+.dnmcppp-header {
+    height: 40px;
+    color: #0067a5;
+    font-size: 18px;
+    font-weight: 400;
+    padding: 6px 2%;
+    border-bottom: 1px solid #ccc;
+}
+
+.dnmcppp-footer {
+    height: 50px;
+    padding: 7px;
+    border-top: 1px solid #ccc;
+}
+
+.dnmcppp-content {
+    padding: 3% 7%;
+    overflow: auto;
+}
+
+@media (max-width: 991px) {
+    .dnmcppp-container {
+        width: 100%;
+    }
+    .newtask-label {
+        width: 100%;
+    }
+    .newtask-formcontrol {
+        width: 100%;
+    }
+    .newtask-label {
+        padding: 0.6rem 0;
+    }
+    .tasktype-group {
+        width: 100%;
+    }
+}

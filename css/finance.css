@@ -1,0 +1,15 @@
+.finance-digram-shell {
+    height: 50%;
+    float: left;
+}
+
+#finance_content {
+    overflow: auto;
+}
+
+@media only screen and (max-width: 576px) {
+    .finance-shell {
+        -ms-flex-direction: column;
+        flex-direction: column;
+    }
+}

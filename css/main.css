@@ -1,0 +1,33 @@
+@import "bootstrap.css";
+@import "main_frame.css";
+
+@import "fullwidth_table.css";
+
+/*@import "fa_icons.css";*/
+@import "icon.css";
+
+@import "feladatkezeles.css";
+@import "projects.css";
+
+@import "feladathozzaadas.css";
+
+@import "periodikuslista.css";
+@import "partners_manager.css";
+@import "finance.css";
+
+@import "eszkozok.css";
+
+@import "alkalmazottak.css";
+
+@import "tablazatdesign.css";
+
+@import "card_container.css";
+
+@import "login.css";
+@import "dinamic_popup.css";
+
+@import "hello.css";
+
+@import "blured_mainpage.css";
+
+@import "beallitasok.css";

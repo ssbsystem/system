@@ -1,0 +1,141 @@
+.employeecard {
+    height: 250px;
+    margin-bottom: 30px;
+    padding: 0px;
+    position: relative;
+    background: #fff 50%;
+    background-size: cover;
+    border-radius: .25rem;
+    box-shadow: 0 0 0.25rem rgba(0,0,0,.08), 0 0.5rem 0.75rem rgba(0,0,0,.14);
+    transition: all .2s ease;
+}
+
+.employeecard:hover {
+    cursor: pointer;
+    box-shadow: 0 0 1px rgba(39,44,49,.1), 0 3px 16px rgba(39,44,49,.07);
+    transition: all .3s ease;
+    transform: translate3D(0,-1px,0);
+}
+.employee-image-container i{
+    font-size: 60px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    width: 100%;
+    text-align: center;
+    color: rgb(43, 65, 107);
+}
+.employee-image{
+    width: 100%;
+    height: auto;
+    max-height: 130px;
+}
+.employee-datas{
+    width: 100%;
+    margin-top: 20px;
+    text-align: center;
+}
+.employee-name{
+    font-size: 28px;
+    font-weight: 200;
+    margin-bottom: 16px;
+    color: #666;
+}
+.employee-rate{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: rgb(43, 65, 107);
+}
+.employee-detail{
+    color: #262626;
+    font-weight: 400;
+    margin: 0;
+    font-size: 1.1rem;
+}
+.employee-detail span{
+    color: rgb(43, 65, 107);
+}
+.employee-detail-position{
+    margin-bottom: 0;
+    color: #666;
+}
+.employee-detail-name{
+    padding-top:10px;
+    margin-bottom: 0;
+}
+.message-button {
+    position: absolute;
+    bottom: 15px;
+    right: 65px;
+    color: #fff;
+    background-color: #3B4372;
+    border: none;
+}
+
+.message-button:hover {
+    background-color: #333;
+}
+
+.collapse-card-body{
+    padding: 15px;
+    height: 280px;
+}
+.employee-card-header{
+    padding: 2px 8px;
+}
+.employee-datatype{
+    font-weight: 600;
+    color: #777;
+}
+.employee-contact-icon{
+    padding-right: 5px;
+}
+.employee-button-container{
+    width: 100%;
+}
+.edit-employee-button{
+    background-color: #3B4372;
+    width: 45%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 16px;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    color: #fff;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+}
+.employee-aggregated{
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+.cost-red-style{
+    color: red;
+}
+.income-green-style{
+    color: green;
+}
+.employee-detail-par{
+    margin: 0;
+}
+#back_to_employee_header {
+    background-color: rgb(241, 241, 241);
+}
+#back_to_employee {
+    cursor: pointer;
+    font-size: 1.4rem;
+    line-height: 1;
+    color: #404040;
+    text-align: center;
+}
+#back_to_employee_text {
+    color: #404040;
+    font-size: 1.4rem;
+    padding: none;
+    margin: none;
+    width: 100%;
+}

@@ -1,0 +1,228 @@
+.blured-large{
+    background-color: rgb(242, 243, 247);
+    border-radius: 8px;
+    width: 50%;
+    height: 32px;
+    margin: 10px;;
+    clear: both;
+}
+.blured-mid{
+    background-color: rgb(242, 243, 247);
+    border-radius: 5px;
+    width: 40%;
+    height: 24px;
+    margin-bottom: 10px;;
+    clear: both;
+}
+.blured-mid2{
+    background-color: rgb(242, 243, 247);
+    border-radius: 5px;
+    width: 70%;
+    height: 24px;
+    margin-bottom: 10px;
+    clear: both;
+}
+.blured-mid3{
+    background-color: rgb(235, 235, 238);
+    border-radius: 5px;
+    width: 44%;
+    margin-left: 28%;
+    margin-right: 28%;
+    height: 20px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    clear: both;
+}
+.blured-mid4{
+    background-color: rgb(242, 243, 247);
+    border-radius: 5px;
+    width: 70%;
+    height: 24px;
+    margin-left: 10px;
+    clear: both;
+}
+.blured-mid5{
+    background-color: rgb(242, 243, 247);
+    border-radius: 5px;
+    width: 60%;
+    height: 24px;
+    margin-left: 10px;
+    clear: both;
+}
+.blured-fig{
+    background-color: rgb(235, 235, 238);
+    border-radius: 5px;
+    width: 36%;
+    margin-left: 32%;
+    margin-right: 32%;
+    height: 50px;
+    clear: both;
+}
+.blured-small{
+    background-color: rgb(242, 243, 247);
+    border-radius: 5px;
+    width: 55%;
+    height: 14px;
+    margin-bottom: 5px;
+    clear: both;
+}
+.blured-short{
+    background-color: rgb(242, 243, 247);
+    border-radius: 5px;
+    width: 50px;
+    height: 14px;
+    clear: both;
+    display: inline-block;
+}
+.blured-filter{
+    margin: 15px;
+}
+.darkened-bg{
+    background: rgba(0, 0, 0, 0.35);
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    backdrop-filter: blur(2px);
+}
+.login-popup{
+    z-index: 1100;
+    text-align: center;
+    width: 30%;
+    height: 400px;
+}
+.newpassword-formcontrol{
+    width: 100%;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .175rem .55rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #aaa;
+    border-radius: 10px;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+.password-form{
+    text-align: center;
+    padding: 15px;
+}
+.password-form input{
+    margin-top: 10px;
+    border-color: rgba(255, 255, 255, 0.3);
+    background-color: #eee;
+    color: #333;
+}
+.password-form input:focus{
+    margin-top: 10px;
+    border-color: rgba(161, 161, 161, 0.3);
+    background-color: #fefefe;
+    color: #333;
+    box-shadow: 0 0 0 0.2rem #0066a559;
+}
+#username{
+    margin-bottom: 20px;
+    color: #555;
+    font-weight: 200;
+}
+.profile-picture-dark{
+    color: #444;
+    margin-top: 25px;
+}
+.toast-message{
+    text-align: center;
+    width: 95%;
+    height: auto;
+    position: absolute;
+    left: 50%;
+    top: 32px;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+    background-color: #eee;
+    padding-top: 11px;
+    padding-bottom: 11px;
+    padding-left: 15px;
+    padding-right: 15px;
+    z-index: 1200;
+    display: block;
+    visibility: hidden; /* Hidden by default. Visible on click */
+
+}
+.toast-message-displayed{
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    padding-top: -100px;
+    visibility: visible; /* Show the snackbar */
+}
+@-webkit-keyframes fadein {
+    from {top: 0; opacity: 0;}
+    to {top: 30px; opacity: 1;}
+  }
+  
+  @keyframes fadein {
+    from {top: 0; opacity: 0;}
+    to {top: 30px; opacity: 1;}
+  }
+  
+  @-webkit-keyframes fadeout {
+    from {top: 30px; opacity: 1;}
+    to {top: 0; opacity: 0;}
+  }
+  
+  @keyframes fadeout {
+    from {top: 30px; opacity: 1;}
+    to {top: 0; opacity: 0;}
+  }
+.toast-message p{
+    width: 80%;
+    font-size: 16px;
+    margin: auto;
+}
+.toast-message i{
+    position: absolute;
+    font-size: 26px;
+    margin: 0;
+    left: 17px;
+    bottom: 12px;
+}
+.new-password-form-container{
+    padding: 3% 15%;
+}
+.password-popup-content{
+    overflow: hidden;
+}
+
+@media only screen and (max-width: 992px) {
+    .blured-fig {
+        height: 40px;
+    }
+}
+@media only screen and (max-width: 768px) {
+    .login-popup{
+        width: 100%;
+        height: 100%;
+    }
+    .new-password-form-container{
+        padding: 3% 5%;
+        margin-top: 10%;
+    }
+}
+@media only screen and (max-width: 630px) {
+    .blured-fig {
+        height: 24px;
+    }
+}
+@media only screen and (max-width: 576px) {
+    .item-icon {
+        height: 22px;
+    }
+}
+@media only screen and (min-width: 1250px) {
+    .login-popup{
+        width: 22%;;
+    }
+}

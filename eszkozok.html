@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <title>SBSS</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css'
+        integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="js/main.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div id="partners_manager" class="display-flex flex-row full-screen">
+        <div class="flex-fill col-2 filter-box">
+            <div class="task-filters">
+                <h5 class="taskfilter-title"><i class="fas fa-filter"></i>Szűrők</h5>
+                <div class="form-group input-row">
+                    <label class="taskfilter-label" for="exampleFormControlSelect1">Szűrő1</label>
+                    <select class="form-control taskfilter" id="exampleFormControlSelect1">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+
+
+                <!--JS fogja generálni-->
+                <div class="form-group input-row">
+                    <label for="" class="taskfilter-label">Live-search</label>
+                    <select name="" id="" class="selectpicker my-0 form-control taskfilter" data-live-search="true">
+                        <option value="">Első</option>
+                        <option value="">Második</option>
+                        <option value="">Harmadik</option>
+                    </select>
+                </div>
+                <!---->
+
+                <div class="form-group input-row">
+                    <label class="taskfilter-label" for="exampleFormControlSelect1">Szűrő2</label>
+                    <select class="form-control taskfilter" id="exampleFormControlSelect1">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+                <div class="form-group input-row">
+                    <label class="taskfilter-label" for="exampleFormControlSelect1">Szűrő3</label>
+                    <select class="form-control taskfilter" id="exampleFormControlSelect1">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+                <div class="form-group input-row">
+                    <label class="taskfilter-label" for="exampleFormControlSelect1">Szűrő4</label>
+                    <select class="form-control taskfilter" id="exampleFormControlSelect1">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+            </div>
+            <div class="task-orders">
+                <h5 class="taskfilter-title"><i class="fas fa-sort-amount-down-alt"></i>Rendezés</h5>
+                <div class="form-group input-row">
+                    <label class="taskfilter-label" for="exampleFormControlSelect1">Rendezés1</label>
+                    <select class="form-control taskfilter" id="exampleFormControlSelect1">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+                <div class="form-group input-row">
+                    <label class="taskfilter-label" for="exampleFormControlSelect1">Rendezés2</label>
+                    <select class="form-control taskfilter" id="exampleFormControlSelect1">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-10 filtered-table display-flex flex-1">
+            <button class="btn btn-primary fixedaddbutton"><i class="fas fa-plus"></i></button>
+            <div class="col-8 card-container">
+                <div id="partners_card_container" class="row">
+                    <div class="col-lg-12">
+                        <div id="tool_card_1" class="card toolcard tool-show-details">
+                            <div class="card-body">
+                                <div class="display-flex justify-content-between">
+                                    <div class="tool-image-container">
+                                        <img class="tool-image"
+                                            src="https://images.obi.hu/product/HU/800x600/292962_1.jpg">
+                                    </div>
+                                    <div class="tool-datas">
+                                        <h3 class="card-title tool-name">Samsung laptop</h3>
+                                        <p class="tool-detail"><i class="fas fa-map-pin"></i> Helye: Gyár, 3-as raktár
+                                        </p>
+                                        <div class="d-flex justify-content-between week-container">
+                                            <div class="week-day week-day-red">
+                                                <p class="day-name">H</p>
+                                            </div>
+                                            <div class="week-day week-day-green">
+                                                <p class="day-name">K</p>
+                                            </div>
+                                            <div class="week-day week-day-red">
+                                                <p class="day-name">Sz</p>
+                                            </div>
+                                            <div class="week-day week-day-green">
+                                                <p class="day-name">Cs</p>
+                                            </div>
+                                            <div class="week-day week-day-green">
+                                                <p class="day-name">P</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="card toolcard">
+                            <div class="card-body">
+                                <div class="display-flex justify-content-between">
+                                    <div class="tool-image-container display-flex align-items-center">
+                                        <img class="tool-image"
+                                            src="https://i0.wp.com/www.yral.net/wp-content/uploads/2018/11/What-is-the-philosophers-stone.png?fit=670%2C508&ssl=1">
+                                    </div>
+                                    <div class="tool-datas">
+                                        <h3 class="card-title tool-name">Bölcsek Köve</h3>
+                                        <p class="tool-detail"><i class="fas fa-map-pin"></i> Helye: 2-es raktár</p>
+                                        <button type="button" class="btn btn-primary tool-tag tool-tag-available"><i
+                                                class="fas fa-check tool-tag-icon"></i>Elérhető</button>
+                                        <a href="#" class="btn btn-primary next-button show-details" id="fjh7zd"><i
+                                                class="fas fa-arrow-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="card toolcard">
+                            <div class="card-body">
+                                <div class="display-flex justify-content-between">
+                                    <div class="tool-image-container display-flex align-items-center">
+                                        <img class="tool-image"
+                                            src="https://cdn.shopify.com/s/files/1/2597/5112/products/hpnbwandlurc_2_3e19f8c7-9d53-4a9b-94e6-53d5d675125e_1200x1200.jpg?v=1529653289">
+                                    </div>
+                                    <div class="tool-datas">
+                                        <h3 class="card-title tool-name">Varázspálca</h3>
+                                        <p class="tool-detail"><i class="fas fa-map-pin"></i> Helye: Harry Potter</p>
+                                        <button type="button" class="btn btn-primary tool-tag tool-tag-reserved"><i
+                                                class="far fa-times-circle tool-tag-icon"></i>Használatban</button>
+                                        <a href="#" class="btn btn-primary next-button show-details" id="fjh7zd"><i
+                                                class="fas fa-arrow-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="card toolcard">
+                            <div class="card-body">
+                                <div class="display-flex justify-content-between">
+                                    <div class="tool-image-container display-flex align-items-center">
+                                        <img class="tool-image"
+                                            src="https://vignette.wikia.nocookie.net/harrypotter/images/1/1e/Hedwig_Snowy_Owl_PM.png/revision/latest?cb=20161123234010">
+                                    </div>
+                                    <div class="tool-datas">
+                                        <h3 class="card-title tool-name">Bagoly</h3>
+                                        <p class="tool-detail"><i class="fas fa-map-pin"></i> Helye: állatorvos</p>
+                                        <button type="button" class="btn btn-primary tool-tag tool-tag-service"><i
+                                                class="fas fa-toolbox tool-tag-icon"></i>Szervízben</button>
+                                        <a href="#" class="btn btn-primary next-button show-details" id="fjh7zd"><i
+                                                class="fas fa-arrow-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="card toolcard">
+                            <div class="card-body">
+                                <div class="display-flex justify-content-between">
+                                    <div class="tool-image-container display-flex align-items-center">
+                                        <img class="tool-image"
+                                            src="https://i0.wp.com/www.yral.net/wp-content/uploads/2018/11/What-is-the-philosophers-stone.png?fit=670%2C508&ssl=1">
+                                    </div>
+                                    <div class="tool-datas">
+                                        <h3 class="card-title tool-name">Bölcsek Köve</h3>
+                                        <p class="tool-detail"><i class="fas fa-map-pin"></i> Helye: 2-es raktár</p>
+                                        <button type="button" class="btn btn-primary tool-tag tool-tag-available"><i
+                                                class="fas fa-check tool-tag-icon"></i>Elérhető</button>
+                                        <a href="#" class="btn btn-primary next-button show-details" id="fjh7zd"><i
+                                                class="fas fa-arrow-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4" id="detail-placeholder" style="display: none">
+                A részletekért válassz egy feladatot!
+            </div>
+            <div class="col-4" id="tool_details">
+                <div id="tool_details_titlebox">
+                    <h2 class="name-grey">Samsung laptop</h2>
+                    <p><label>Elektronikai eszköz</label></p>
+                </div>
+                <div id="tool_details_tab" class="display-flex justify-content-center">
+                    <div class="btn-group btn-group-toggle btn-group-detailmenu" data-toggle="buttons"><label
+                            id="tool_details_data_btn" tab-cont-id="tool_details_cc_g"
+                            class="btn btn-detail-menu active" aria-pressed="true">Adatok </label><label
+                            id="tool_details_vo_0_btn" tab-cont-id="tool_details_vo_0"
+                            class="btn btn-detail-menu btn-detail-menu-active" aria-pressed="false">Megjegyzések</label>
+                    </div>
+                </div>
+                <div id="tool_details_content" class="auto-scroll-default" style="height: 460px;">
+                    <div id="tool_details_cc_g" class="tool_details_vo" style="display: none;">
+                        <p id="g1"><label class="title-text">Helye</label><br><label>Gyár, 3-as raktár</label></p>
+                        <p id="g2"><label class="title-text">Elérhető eszökök</label><br><label>Elérhető</label></p>
+                        <p id="g3"><label class="title-text">Elérhető eszközök</label><br><label>2</label></p>
+                        <p id="g4"><label class="title-text">Utolsó karbantartás</label><br><label>2019-02-01
+                                00:00:00</label></p>
+                        <p id="g5"><label class="title-text">Karbantartást igényel</label><br><label>120</label></p>
+                        <p id="g6"><label class="title-text">Leírás</label><br><label>Semmi extra.</label></p>
+                    </div>
+                    <div id="tool_details_vo_0" style="display: block;" class="tool_details_vo">
+                        <div class="row" id="tool_details_vo_0_1">
+                            <div class="card commentcard">
+                                <div class="card-body">
+                                    <div class="display-flex justify-content-between">
+                                            <p class="tool-comment-text">Mondjuk ez itt egy hosszabb megjegyzés, hogy lássuk, hogy néz ki egy ilyen a kártyán.</p>
+                                    </div>
+                                    <div class="row comment-writer-datas">
+                                        <div class="comment-writer-logocontainer">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <div class="comment-writer-namecontainer">
+                                            <p class="commenter-name">Ádám Werner</p>
+                                            <p class="comment-time">2019-09-02 01:28:20</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" id="tool_details_vo_0_3">
+                            <div class="card commentcard">
+                                <div class="card-body">
+                                    <div class="display-flex justify-content-between">
+                                            <p class="tool-comment-text">Ez egy rövid megjegyzés.</p>
+                                    </div>
+                                    <div id="3" class="row comment-writer-datas" style="">
+                                        <div class="comment-writer-logocontainer">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <div class="comment-writer-namecontainer">
+                                            <p class="commenter-name">Áron Kósa</p>
+                                            <p class="comment-time">2019-09-02 01:28:20</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" id="tool_details_vo_0_2">
+                            <div class="card contactcard">
+                                <div class="card-body">
+                                    <div class="display-flex justify-content-between"><i class="fas fa-cube"></i>
+                                        <div class="partner-contact-main flex-1">
+                                            <h3 class="card-title contact-name">Ádám</h3>
+                                            <p>Ez a második.</p>
+                                        </div>
+                                    </div>
+                                    <div id="1" class="contact-container" style="">
+                                        <p class="contactdata"><i class="fab fa-buffer partnercard-logo"></i>2019-09-02
+                                            01:28:20</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="filtered-table-fade flex-1"></div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

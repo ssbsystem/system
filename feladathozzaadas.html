@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <title>SSBS</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <div id="new_task" class="d-flex display-flex flex-row full-screen">
+        <div class="flex-fill col-12">
+            <div class="row page-content">
+                <div class="new-obj-shell col-md-6 col-12">
+                    <h2 class="new-obj-subtitle">Adatok</h2>
+                    <div id="processes_new_t_form">
+                        <div class="form-group input-row">
+                            <label for="taskName" class="newtask-label">Feladat neve:</label>
+                            <input type="text" id="taskName" class="newtask-formcontrol">
+                        </div>
+                        <div class="form-group input-row">
+                            <label for="taskCat" class="newtask-label">Feladat típusa:</label>
+                            <div class="tasktype-group">
+                                <div class="input-group mb-3">
+                                    <select class="form-control newtask-formcontrol" aria-describedby="button-addon2">
+                                        <option selected>Choose...</option>
+                                        <option>...</option>
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i
+                                                class="fas fa-plus"></i></button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="collapse" id="collapseExample">
+                            <div class="card card-body">
+                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
+                                squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt
+                                sapiente
+                                ea proident.
+                            </div>
+                        </div>
+                        <div class="form-group input-row">
+                            <label for="taskDate" class="newtask-label">Feladat határideje:</label>
+                            <input type="date" id="taskDate" class="newtask-formcontrol">
+                        </div>
+
+                        <div class="form-group input-row">
+                            <label for="taskProject" class="newtask-label">Projekthez rendelés:</label>
+                            <select id="taskProject" class="newtask-formcontrol">
+                                <option selected>Choose...</option>
+                                <option>...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="newtask-buttoncontainer d-flex justify-content-start">
+                        <button id="add_new_task_btn" type="submit" class="btn btn-primary addnewtask-button">Létrehoz</button>
+                        <button type="reset" class="btn btn-primary addnewtask-button grey-button">Mégse</button>
+                    </div>
+                </div>
+                <div class="new-obj-shell col-md-6 col-12">
+                    <h2 class="new-obj-subtitle">Feladat lépései</h2>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="add-taskstep-container">
+                            <p id="addstep_title">Lépés hozzáadása...</p>
+                            <span onclick="showForms(this)" class="btn-show-forms"><i
+                                    class="fas fa-chevron-down"></i></span>
+                            <div id="add_taskstep_collapse" style="display:none;">
+                                <div class="add-taskstep-btn-container">
+                                    <div class="btn-group btn-group-toggle btn-group-detailmenu" data-toggle="buttons">
+                                        <label id="new_taskstep_btn"
+                                            class="btn collapsable-form-tabs collapsable-form-tabs-active">
+                                            <input type="radio" name="options" id="new_taskstep_option"
+                                                autocomplete="off" onchange="showNewTaskStep()">
+                                            + Új lépés
+                                        </label>
+                                        <label id="saved_tasksteps_btn" class="btn collapsable-form-tabs">
+                                            <input type="radio" name="options" id="saved_tasksteps_option"
+                                                autocomplete="off" onchange="showSavedTaskSteps()">
+                                            Mentett lépések
+                                        </label>
+                                    </div>
+                                </div>
+                                <div id="new_taskstep_container" class="add-taskstep-form-container">
+                                    <div class="form-group input-row">
+                                        <label for="taskName" class="newtaskstep-label">Lépés neve:</label>
+                                        <input type="text" id="new_taskstep_name" class="newtask-formcontrol">
+                                    </div>
+                                    <button type="reset" onclick='getStepNamefromText("new_taskstep_name")'
+                                        class="btn btn-primary add-step-button">+ Hozzáad</button>
+                                </div>
+                                <div id="saved_taskstep_container" class="add-taskstep-form-container">
+                                    <div class="form-group input-row">
+                                        <label for="taskCat" class="newtaskstep-label">Lépés neve:</label>
+                                        <div class="tasktype-group">
+                                            <div class="input-group mb-3">
+                                                <select id="saved_step_selector"
+                                                    class="form-control newtask-formcontrol"
+                                                    aria-describedby="button-addon2">
+                                                    <option selected>Mentett lépések...</option>
+                                                    <option>Meeting</option>
+                                                    <option>Beszerzés</option>
+                                                    <option>Tesztelés</option>
+                                                </select>
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-outline-secondary" type="button"
+                                                        id="new_saved_step_btn"><i class="fas fa-plus"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="reset" onclick='getStepNamefromSelect("saved_step_selector")'
+                                        class="btn btn-primary add-step-button">+ Hozzáad</button>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <button type="reset" onclick="deleteAll()" id="delete_button"
+                            class="btn btn-primary grey-button"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                    <div class="taskstep-container">
+                        <div id="processes_new_t_slides" class="slides">
+                            <div class="slide slide1">
+                                <div class="row taskstep-card d-flex align-items-center">
+                                    <span class="stepNo">1.</span>
+                                    <h3 class=taskstep-title>lépés</h3>
+                                </div>
+                                <div class="row add-employee-card">
+                                    <div class="btn btn-sm employee-box">
+                                        <i class="fas fa-user addemployee-icon "></i>Werner Ádám
+                                        <span onclick="deleteEmployee(this)" class="closebtn">&times;</span>
+                                    </div>
+                                </div>
+                                <div class="row add-employee-card">
+                                    <div class="btn btn-sm added-employee-input"> <i
+                                            class="fas fa-user-plus addemployee-icon "></i><select id="employeeSelect1"
+                                            class="add-employee-selector">
+                                            <option selected>Új munkatárs...</option>
+                                            <option>Kósa Áron Balázs</option>
+                                            <option>Sági Dávid</option>
+                                            <option>Werner Ádám</option>
+                                        </select> <span onclick='saveEmployee(this, "employeeSelect1")'><i
+                                                class="fas fa-check-circle save-employee-icon"></i></span></div>
+                                </div>
+                            </div>
+                            <div class="slide slide2">
+                                <div class="row taskstep-card d-flex align-items-center">
+                                    <span class="stepNo">2.</span>
+                                    <h3 class=taskstep-title>lépés</h3>
+                                </div>
+                                <div class="row add-employee-card">
+                                    <div class="btn btn-sm employee-box">
+                                        <i class="fas fa-user addemployee-icon "></i>Sági Dávid
+                                        <span onclick="deleteEmployee(this)" class="closebtn">&times;</span>
+                                    </div>
+                                </div>
+                                <div class="row add-employee-card">
+                                    <div class="btn btn-sm employee-box">
+                                        <i class="fas fa-user addemployee-icon "></i>Kósa Áron Balázs
+                                        <span onclick="deleteEmployee(this)" class="closebtn">&times;</span>
+                                    </div>
+                                </div>
+                                <div class="row add-employee-card">
+                                    <div class="btn btn-sm added-employee-input"> <i
+                                            class="fas fa-user-plus addemployee-icon "></i><select id="employeeSelect2"
+                                            class="add-employee-selector">
+                                            <option selected>Új munkatárs...</option>
+                                            <option>Kósa Áron Balázs</option>
+                                            <option>Sági Dávid</option>
+                                            <option>Werner Ádám</option>
+                                        </select> <span onclick='saveEmployee(this, "employeeSelect2")'><i
+                                                class="fas fa-check-circle save-employee-icon"></i></span></div>
+                                </div>
+                            </div>
+                            <div class="slide slide3">
+                                <div class="row taskstep-card d-flex align-items-center">
+                                    <div class="stepNo">3.</div>
+                                    <h3 class=taskstep-title>lépés</h3>
+                                </div>
+                                <div class="row add-employee-card">
+                                    <div class="btn btn-sm employee-box">
+                                        <i class="fas fa-user addemployee-icon "></i>Kósa Áron Balázs
+                                        <span onclick="deleteEmployee(this)" class="closebtn">&times;</span>
+                                    </div>
+                                </div>
+                                <div class="row add-employee-card">
+                                    <div class="btn btn-sm added-employee-input"> <i
+                                            class="fas fa-user-plus addemployee-icon "></i><select id="employeeSelect3"
+                                            class="add-employee-selector">
+                                            <option selected>Új munkatárs...</option>
+                                            <option>Kósa Áron Balázs</option>
+                                            <option>Sági Dávid</option>
+                                            <option>Werner Ádám</option>
+                                        </select> <span onclick='saveEmployee(this, "employeeSelect3")'><i
+                                                class="fas fa-check-circle save-employee-icon"></i></span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex-fill col-1">
+        </div>
+    </div>
+</body>
+<script>
+    function showForms(e) {
+        if (document.getElementById("add_taskstep_collapse").style.display == "none") {
+            document.getElementById("add_taskstep_collapse").style.display = "block";
+            document.getElementById("addstep_title").style.display = "none";
+        }
+        else {
+            document.getElementById("add_taskstep_collapse").style.display = "none";
+            document.getElementById("addstep_title").style.display = "block";
+        }
+    };
+    function showSavedTaskSteps() {
+        document.getElementById('new_taskstep_container').style.display = "none";
+        document.getElementById('saved_taskstep_container').style.display = "block";
+        var element = document.getElementById("new_taskstep_btn");
+        element.classList.remove("collapsable-form-tabs-active");
+        var element2 = document.getElementById("saved_tasksteps_btn");
+        element2.classList.add("collapsable-form-tabs-active");
+    };
+    function showNewTaskStep() {
+        document.getElementById('saved_taskstep_container').style.display = "none";
+        document.getElementById('new_taskstep_container').style.display = "block";
+        var element = document.getElementById("saved_tasksteps_btn");
+        element.classList.remove("collapsable-form-tabs-active");
+        var element2 = document.getElementById("new_taskstep_btn");
+        element2.classList.add("collapsable-form-tabs-active");
+    };
+    function getStepNamefromText(stepinputId) {
+        let stepName = document.getElementById(stepinputId).value;
+        addNewStep(stepName);
+    };
+    function getStepNamefromSelect(stepinputId) {
+        let selector = document.getElementById(stepinputId);
+        if (selector.selectedIndex == 0) {
+            return;
+        }
+        let stepName = selector.options[selector.selectedIndex].text;
+        addNewStep(stepName);
+    };
+    function addNewStep(sName) {
+        let stepNumber = document.querySelectorAll('.stepNo').length;
+        let container = "";
+        container += document.getElementById("processes_new_t_slides").innerHTML
+        container += '<div class="slide slide';
+        container += (stepNumber + 1).toString();
+        container += '"><div class="row taskstep-card d-flex align-items-center"><span class="stepNo">';
+        container += (stepNumber + 1).toString();
+        container += '.</span><h3 class=taskstep-title>';
+        container += sName;
+        container += '</h3></div>';
+        container += `<div class="row add-employee-card"><div class="btn btn-sm added-employee-input"> <i class="fas fa-user-plus addemployee-icon "></i><select id="employeeSelect`;
+        container += (stepNumber + 1).toString();
+        container += `" class="add-employee-selector"> <option selected>Új munkatárs...</option> <option>Kósa Áron Balázs</option><option>Sági Dávid</option><option>Werner Ádám</option> </select> <span onclick='saveEmployee(this, "employeeSelect`;
+        container += (stepNumber + 1).toString();
+        container += `")'><i class="fas fa-check-circle save-employee-icon"></i></span></div></div></div>`;
+        document.getElementById("processes_new_t_slides").innerHTML = container;
+    };
+    function deleteEmployee(e) {
+        e.parentNode.parentNode.parentNode.removeChild(e.parentNode.parentNode);
+    };
+    function addNewEmployee(el) {
+        //let container="";
+        //container += el.parentNode.parentNode.outerHTML;
+        //container += '<div class="row add-employee-card"> <div class="btn btn-sm added-employee-input"> <i class="fas fa-user addemployee-icon "></i> <select id="employeeSelect" class="add-employee-selector"> <option selected>Choose...</option> <option>...</option> </select><span onClick="deleteEmployee(this)" class="closebtn">&times;</span> </div></div>';
+        //el.parentNode.parentNode.innerHTML = container;
+        el.outerHTML = `<div class="btn btn-sm added-employee-input"> <i class="fas fa-user-plus addemployee-icon "></i><select id="employeeSelect" class="add-employee-selector"> <option selected>Új munkatárs...</option> <option>Kósa Áron Balázs</option><option>Sági Dávid</option><option>Werner Ádám</option> </select> <span onclick='saveEmployee(this, "employeeSelect")'><i class="fas fa-check-circle save-employee-icon"></i></span></div>`;
+
+
+    };
+    function saveEmployee(elem, selectId) {
+        let container = "";
+        let selector = document.getElementById(selectId);
+        if (selector.selectedIndex == 0) {
+            return;
+        }
+        let eName = selector.options[selector.selectedIndex].text;
+        container += '<div class="row add-employee-card"><div class="btn btn-sm employee-box"> <i class="fas fa-user addemployee-icon "></i>'
+        container += eName;
+        container += '<span onClick="deleteEmployee(this)" class="closebtn">&times;</span> </div></div>';
+        container += elem.parentNode.parentNode.outerHTML;
+        elem.parentNode.parentNode.outerHTML = container;
+    };
+    function deleteAll() {
+        document.getElementById("processes_new_t_slides").innerHTML = "";
+    }
+</script>
+
+</html>
