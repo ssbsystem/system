@@ -2,7 +2,6 @@
 
 //Post varibles
 session_start();
-$_SESSION['UserId'] = '1';
 if (!isset($_SESSION['UserId']))
     die('No session!');
 
