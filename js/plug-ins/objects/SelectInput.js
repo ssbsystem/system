@@ -9,7 +9,6 @@ export default class SelectInput {
         if (inputType === 'S'
             || inputType === 'SC'
             || inputType === 'SN'
-            || inputType === 'SO'
             || inputType === 'SP'
         ) {
             return true;

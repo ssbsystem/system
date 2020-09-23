@@ -19,6 +19,7 @@ export default class Filter {
         let filterShellId = `${parentFrameId}_filters`;
         let sortShellId = `${parentFrameId}_sorts`;
         let filterHTML = "";
+        let pluginTable = plugin.TableName;
         let fPluginFormInputId1 = plugin.Data[1].FPluginFormInputId;
         let fPluginFormInputId2 = plugin.Data[2].FPluginFormInputId;
 
@@ -29,14 +30,14 @@ export default class Filter {
         filterHTML += `<div id="${filterShellId}" class="task-filters" fPluginFormInputId="${fPluginFormInputId1}"> </div>`;
         document.getElementById(frameId).insertAdjacentHTML('beforeend', filterHTML);
         if (localStorage.getItem('DevelopMode') === 'true') {
-            AddInput.Integration(frameId, fPluginFormInputId1);
+            AddInput.Integration(frameId, fPluginFormInputId1, pluginTable);
         }
 
         filterHTML = `<h5 class="taskfilter-title"><i class="fas fa-sort-amount-down-alt"></i>Rendezés</h5>`;
         filterHTML += `<div id="${sortShellId}" class="task-filters" fPluginFormInputId="${fPluginFormInputId2}"> </div>`;
         document.getElementById(frameId).insertAdjacentHTML('beforeend', filterHTML);
         if (localStorage.getItem('DevelopMode') === 'true') {
-            AddInput.Integration(frameId, fPluginFormInputId2);
+            AddInput.Integration(frameId, fPluginFormInputId2, pluginTable);
         }
 
         CardContainerPlus.Create(plugin.Data[1].Inputs, filterShellId, this.getFilterHTML);

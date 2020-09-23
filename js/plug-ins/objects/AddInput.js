@@ -9,18 +9,23 @@ export default class AddInput {
      * @param {String} frameId 
      * @param {String} fPluginFormInputId 
      */
-    static Integration(frameId, fPluginFormInputId) {
+    static Integration(frameId, fPluginFormInputId, pluginTable) {
         document.getElementById(frameId).insertAdjacentHTML(
             'beforeend',
             AddInput.getFrame(fPluginFormInputId)
         );
 
         $(`#add_input_${fPluginFormInputId}`).click(function () {
-            AddInput.loadDinamicPopup(fPluginFormInputId);
+            AddInput.loadDinamicPopup(fPluginFormInputId, pluginTable);
         });
     }
 
-    static loadDinamicPopup(fPluginFormInputId) {
+    /**
+     * Load Dinamic Popup
+     * @param {String} fPluginFormInputId 
+     * @param {String} pluginTable 
+     */
+    static loadDinamicPopup(fPluginFormInputId, pluginTable) {
         let module = 'CustomData';
         let data = {};
         data['Place'] = '3';
@@ -65,11 +70,11 @@ export default class AddInput {
                 let popupInputsShellId = `${childFrameId}_data`;
                 let transferData = {};
                 transferData['IsFormInput'] = true;
-                transferData['TableName'] = dcmpPlugin['TableName'];
+                transferData['TableName'] = pluginTable;
                 localStorage.setItem(popupInputsShellId, JSON.stringify(transferData));
 
                 DinamicFormPopup.open(childFrameId, parentFrameId, title, false);
-                DinamicFormPopup.onLoad(dcmpPlugin.Data['1'], childFrameId, parentFrameId, []);
+                DinamicFormPopup.onLoad(dcmpPlugin.Data['1'], childFrameId, parentFrameId, [], pluginTable);
             },
             dataType: 'json'
         });

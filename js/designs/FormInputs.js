@@ -19,7 +19,7 @@ let FormInputs = {
             uploadData = {};
         uploadData['UpdateByParamData'] = updateData;
         uploadData['EntryId'] = entryId;
-        
+
         console.log(uploadData);
 
         $.ajax({
@@ -521,10 +521,11 @@ let FormInputs = {
 
                     let plugin = plugins[1];
                     let columnOpp = plugin.Data['1'].VO;
+                    let columnSelect = document.getElementById(`${shellId}_${id}_c`);
 
-                    document.getElementById(`${shellId}_${id}_c`).innerHTML = '';
+                    columnSelect.innerHTML = '';
                     for (const option of columnOpp) {
-                        document.getElementById(`${shellId}_${id}_c`).insertAdjacentHTML(
+                        columnSelect.insertAdjacentHTML(
                             'beforeend',
                             `<option value="${option.Id}">${option.Name}</option>`
                         );
@@ -532,6 +533,12 @@ let FormInputs = {
 
                     if (isFormInput) {
                         setUploadName(shellId);
+                        columnSelect.addEventListener(
+                            'change',
+                            function () {
+                                setUploadName(shellId);
+                            }
+                        );
                     }
                 },
                 dataType: 'json'
@@ -541,9 +548,8 @@ let FormInputs = {
 
         function setUploadName(shellId) {
             let frgnTableId = document.querySelector(`[upload-name="t_103.c_5_fk"][data-place="${shellId}_cstm"]`).value;
-            console.log(frgnTableId);
             let inputType = document.querySelector(`[upload-name="t_103.c_61"][data-place="${shellId}"]`).value;
-            console.log(inputType);
+            console.log(frgnTableId);
 
             let uploadName = document.querySelector(`[upload-name="t_103.c_36"][data-place="${shellId}"]`);
             if (SelectInput.Decide(inputType)) {

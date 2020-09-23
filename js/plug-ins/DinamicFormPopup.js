@@ -127,8 +127,9 @@ export default class DinamicFormPopup {
         function success(plugin, entryIdJSON, parentFrameId) {
             let formData = plugin.Data['1'];
             let children = plugin.Data['Children'];
+            let pluginTable = plugin.TableName;
 
-            DinamicFormPopup.onLoad(formData, frameId, parentFrameId, children, entryIdJSON);
+            DinamicFormPopup.onLoad(formData, frameId, parentFrameId, children, entryIdJSON, pluginTable);
         }
     }
 
@@ -138,7 +139,7 @@ export default class DinamicFormPopup {
      * @param {String} frameId 
      * @param {JSON} entryId 
      */
-    static onLoad(formData, frameId, parentFrameId, children, entryId = null) {
+    static onLoad(formData, frameId, parentFrameId, children, entryId = null, pluginTable = null) {
         AutoScroll.Integration(frameId);
 
         const dataFrameId = frameId + '_data';
@@ -163,7 +164,7 @@ export default class DinamicFormPopup {
 
         if (localStorage.getItem('DevelopMode') === 'true') {
             let FPluginFormInputId = formData.FPluginFormInputId;
-            AddInput.Integration(`${frameId}_data`, FPluginFormInputId);
+            AddInput.Integration(`${frameId}_data`, FPluginFormInputId, pluginTable);
         }
 
         for (const plugin of children) {
