@@ -74,7 +74,7 @@ export default class AddInput {
                 localStorage.setItem(popupInputsShellId, JSON.stringify(transferData));
 
                 DinamicFormPopup.open(childFrameId, parentFrameId, title, false);
-                DinamicFormPopup.onLoad(dcmpPlugin.Data['1'], childFrameId, parentFrameId, [], pluginTable);
+                DinamicFormPopup.onLoad(dcmpPlugin.Data['1'], childFrameId, parentFrameId, [], null, pluginTable);
             },
             dataType: 'json'
         });
