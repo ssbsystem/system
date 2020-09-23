@@ -10,7 +10,11 @@ class CreateFormInputs
         require_once('Connect.php');
         $PDOConnect = new PDOConnect();
         $pdo = $PDOConnect->pdo;
+        //Switch plugin
+        require_once('SwitchPlugin.php');
+        $this->switchPlugin = new SwitchPlugin();
         //Result form structure
+        $where = "c_107_fk" . $this->switchPlugin->ifNull($fPluginFormInputFK);
         $resultFormStructure = $pdo->query(
             "SELECT 
                 c_107_fk,
@@ -32,8 +36,8 @@ class CreateFormInputs
              FROM t_103 
              INNER JOIN t_7 ON c_7_id=c_7_fk 
              INNER JOIN t_5 ON c_5_id=c_5_fk 
-             WHERE c_107_fk='$fPluginFormInputFK' 
-             ORDER BY Number;"
+             WHERE $where
+             ORDER BY c_32;"
         )->fetchAll(PDO::FETCH_ASSOC);
 
         $mainResult = array();

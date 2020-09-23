@@ -85,6 +85,8 @@ class GetData
         $result = array();
 
         if ($isFormInputs) {
+            $where = "c_107_fk" . $this->switchPlugin->ifNull($fPluginDisplayId);
+
             $fDisplays = $this->pdo->query(
                 "SELECT 
                     c_107_fk,
@@ -106,7 +108,8 @@ class GetData
                  FROM t_103 
                  INNER JOIN t_7 ON c_7_id=c_7_fk
                  INNER JOIN t_5 ON c_5_id=c_5_fk 
-                 WHERE c_107_fk" . $this->switchPlugin->ifNull($fPluginDisplayId)
+                 WHERE $where
+                 ORDER BY c_32"
             )->fetchAll(PDO::FETCH_ASSOC);
 
             foreach ($fDisplays as $fDKey => $fDValue) {
@@ -120,6 +123,7 @@ class GetData
             }
         } else {
             //Get display columns metadata
+            $where = "c_106_fk" . $this->switchPlugin->ifNull($fPluginDisplayId);
             $fDisplays = $this->pdo->query(
                 "SELECT 
                     c_106_fk,
@@ -134,7 +138,8 @@ class GetData
                  FROM t_102 
                  INNER JOIN t_7 ON c_7_id=c_7_fk
                  INNER JOIN t_5 ON c_5_id=c_5_fk 
-                 WHERE c_106_fk" . $this->switchPlugin->ifNull($fPluginDisplayId)
+                 WHERE $where
+                 ORDER BY c_60"
             )->fetchAll(PDO::FETCH_ASSOC);
 
             foreach ($fDisplays as $fDKey => $fDValue) {
