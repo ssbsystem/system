@@ -76,13 +76,6 @@ export default class Details {
         let createBox = new CreateBox();
         createBox.create(headerData, detailsHTML, frameId);
 
-        if (localStorage.getItem(`${parentFrameId}_edit_mode`) === 'true') {
-            document.getElementById(frameId).insertAdjacentHTML(
-                'beforeend',
-                `<button id="${frameId}_edit_btn" class="fixededitbutton">Edit<i class="far fa-edit"></i></button>`
-            )
-        }
-
         let contentData = plugin.Data['2'].Display;
         let dataFrameId = `${frameId}_cdb_g`;
         let createDBox = new CreateDBox();
@@ -110,16 +103,23 @@ export default class Details {
             }
         )
 
-        // Backward navigation to button
-        document.getElementById(`${frameId}_edit_btn`).addEventListener(
-            'click',
-            function () {
-                let openFormData = {};
-                openFormData.Type = 'update';
-                localStorage.setItem(`${parentFrameId}_open_form`, JSON.stringify(openFormData));
-                $(`#${parentFrameId}`).trigger(`${parentFrameId}_open_form`);
-            }
-        )
+        if (localStorage.getItem(`${parentFrameId}_edit_mode`) === 'true') {
+            document.getElementById(frameId).insertAdjacentHTML(
+                'beforeend',
+                `<button id="${frameId}_edit_btn" class="fixededitbutton">Edit<i class="far fa-edit"></i></button>`
+            )
+
+            // Backward navigation to button
+            document.getElementById(`${frameId}_edit_btn`).addEventListener(
+                'click',
+                function () {
+                    let openFormData = {};
+                    openFormData.Type = 'update';
+                    localStorage.setItem(`${parentFrameId}_open_form`, JSON.stringify(openFormData));
+                    $(`#${parentFrameId}`).trigger(`${parentFrameId}_open_form`);
+                }
+            )
+        }
 
         AutoScroll.Integration(`${frameId}_content`);
     }
