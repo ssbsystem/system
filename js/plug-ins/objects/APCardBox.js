@@ -31,7 +31,7 @@ export default class APCardBox {
 
         /** Display */
         // Display data
-        let c_title = 'Title',
+        let c_title = 'c_64',
             v_title = 'Display';
         table = 't_106';
 
