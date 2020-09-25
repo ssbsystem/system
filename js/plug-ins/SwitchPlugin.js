@@ -108,7 +108,7 @@ export default class SwitchPlugin {
                 logout.Create(frameId, parentFrameId);
                 break;
             /** Sending user invitation */
-            case '15':
+            case '1000':
                 Promise.all([
                     import('./InvitationEmail.js'),
                 ]).then(([Module]) => {

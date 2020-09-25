@@ -1,5 +1,3 @@
-
-
 export default class InvitationEmail {
     /**
      * Constructor
@@ -12,7 +10,7 @@ export default class InvitationEmail {
      * @param {String} parentFrameId 
      */
     constructor(plugin, frameId, parentFrameId) {
-        InvitationEmail.load(frameId);
+        InvitationEmail.load(parentFrameId);
         this.events(plugin, parentFrameId, frameId);
     }
 
@@ -20,8 +18,8 @@ export default class InvitationEmail {
     /**
      * load
      */
-    static load(frameId) {
-            //alert('Email loaded');
+    static load(parentFrameId) {
+
     }
 
     /**
@@ -32,6 +30,7 @@ export default class InvitationEmail {
      */
     events(plugin, parentFrameId, frameId) {
         $(`#${parentFrameId}`).bind(`${parentFrameId}_save`, function (e) {
+            alert("Kapcsolódva");
             let lastObj = JSON.parse(localStorage.getItem(`${parentFrameId}_save`));
             let lastId = lastObj['LastId'];
             let lastIdColumn = lastObj['LastIdColumn'];
@@ -60,21 +59,23 @@ export default class InvitationEmail {
      */
     static getEmailAddress(itemIdColumn, itemId, parentFrameId) {
         if (true) {
-
+            let data = {};
+            let className = "SendInvitation";
+            data["EmployeeId"] = itemId;
+            
             $.ajax({
                 type: "POST",
-                url: "./php/SendInvitation.php",
-                data: { 'EmployeeId': itemId},
+                url: "./php/Router.php",
+                data: { 'Module': className, 'Data': data },
                 success: function (result) {
-                    alert(JSON.stringify(result));
                     if (result['Result'] === 'S') {
-                        alert("Sikeres mentés");
+                        alert(result['Message']);
                         $(`#${parentFrameId}`).trigger(`${parentFrameId}_save_end`);
                     } else {
                         Swal.fire({
                             type: 'error',
                             title: 'Sikertelen',
-                            text: 'A feladat létrehozása sikertelen volt!',
+                            text: 'A munkavállaló felvétele sikertelen volt!',
                             heightAuto: false
                         });
                     }

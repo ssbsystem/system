@@ -103,6 +103,16 @@ switch ($module) {
 
         print_r(json_encode($main_data));
         break;
+    case 'SendInvitation':
+        //Includes
+        require_once('Modules/SendInvitation.php');
+
+        //Call upload function
+        $sendEmail = new SendEmail();
+        $main_data =  $sendEmail->Create($data);
+
+        print_r(json_encode($main_data));
+        break;
     default:
         # code...
         break;
