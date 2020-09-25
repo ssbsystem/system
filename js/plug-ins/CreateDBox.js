@@ -3,6 +3,7 @@ export default class CreateDBox {
      * Create
      * @param {JSON} data 
      * @param {String} card 
+     * @param {String} subcard 
      * @param {String} targetId 
      */
     create(displayObject, card, subcard, targetId) {

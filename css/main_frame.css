@@ -290,10 +290,18 @@ iframe[seamless] {
 #main_menu {
     width: 180px;
     height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
     z-index: 900;
     background: #fff;
     border-right: 1px solid #cfd3e6;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
 }
+
+#main_menu::-webkit-scrollbar {
+    display: none;
+  }
 
 #content_frame {
     overflow: hidden;
@@ -762,6 +770,33 @@ iframe[seamless] {
     font-size: 1.2rem;
     font-weight: 300;
     color: #a0a0a0;
+}
+
+.choose_card_shell {
+    padding: 15px 20px 15px 20px;
+    margin: 5px 0 20px 0;
+    text-align: center;
+    border-radius: 15px;
+    border: 2px solid #8328a7;
+}
+
+.dev-btn {
+    background: #fff;
+    padding: 6px 12px;
+    font-weight: 600;
+    bottom: 4%;
+    right: 3%;
+    border: 2px solid;
+    border-image-slice: 1;
+    border-width: 2px;
+    border-image-source: linear-gradient(to right, #2b416b, #8328a7);
+    color: #2b416b;
+}
+
+.dev-btn:focus, .dev-btn:hover, .dev-btn:active {
+    background-image: linear-gradient(to right, #8228a6, #2d416c);
+    color: #fff;
+    outline: none;
 }
 
 @media only screen and (min-width: 992px) {

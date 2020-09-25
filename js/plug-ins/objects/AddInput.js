@@ -81,6 +81,8 @@ export default class AddInput {
     }
 
     static getFrame(fPluginFormInputId) {
-        return `<div id="add_input_${fPluginFormInputId}" class="add-input-btn"><i class="far fa-plus-square"></i></div>`
+        return `<div class="add-input-btn">
+                    <button id="add_input_${fPluginFormInputId}" class="dev-btn"><i class="fas fa-plus"></i> Add</button>
+                </div>`
     }
 }

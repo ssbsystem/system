@@ -126,7 +126,7 @@ export default class Details {
 
     static getDevFrame(frameId) {
         return `
-        <div>
+        <div class="position-absolute">
             <button id="${frameId}_edit_details_1">Details1</button>
             <button id="${frameId}_edit_details_2">Details2</button>
         </div>

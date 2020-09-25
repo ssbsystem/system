@@ -185,13 +185,13 @@ export default class CardBox {
     }
 
     static getDevFrame(frameId) {
-        return `<div>
+        return `<div class="choose_card_shell">
                     <div id="${frameId}_dev_card_id"></div>
                     <div id="${frameId}_dev_card"></div>
                     <div id="${frameId}_dev_inputs"></div>
                     <div>
-                        <button id="${frameId}_edit_card">Edit card</button>
-                        <button id="${frameId}_dev_save">Save</button>
+                        <button id="${frameId}_edit_card" class="dev-btn">Edit card</button>
+                        <button id="${frameId}_dev_save" class="dev-btn">Save</button>
                     </div>
                 </div>`;
     }
