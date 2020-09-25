@@ -6,9 +6,10 @@ import DinamicFormPopup from "../DinamicFormPopup.js";
 export default class AddPlugin {
     /**
      * Integration
-     * @param {String} fUserModuleId 
+     * @param {String} parentId FUserModuleId or FModulePluginId
+     * @param {String} level 1: FUserModuleId,  2: FModulePluginId
      */
-    static Integration(fUserModuleId) {
+    static Integration(parentId, level) {
         let module = 'CustomData';
         let data = {};
         data['Place'] = '2';
@@ -39,8 +40,32 @@ export default class AddPlugin {
                         const object = dcmpPlugin.Data['1'].Inputs[key];
 
                         if (object.UploadName === 't_104.c_110_fk') {
-                            dcmpPlugin.Data['1'].Inputs[key].DefaultValue = fUserModuleId;
-                            break;
+                            if (level === 2) {
+                                dcmpPlugin.Data['1'].Inputs[key].UploadName = `t_108.c_104_fk`
+                            } else if (level === 2) {
+                                dcmpPlugin.Data['1'].Inputs[key].UploadName = `t_108.c_108_fk`
+                            }
+
+                            dcmpPlugin.Data['1'].Inputs[key].DefaultValue = parentId;
+
+                            if (level === 1) {
+                                break;
+                            }
+                        } else if (level !== 1) {
+                            let value = object.UploadName.split('.')[1];
+
+                            switch (value) {
+                                case 'c_27':
+                                    value = 'c_68'
+                                    break;
+                                case 'c_28':
+                                    value = 'c_69'
+                                    break;
+                                case 'c_29':
+                                    value = 'c_70'
+                                    break;
+                            }
+                            dcmpPlugin.Data['1'].Inputs[key].UploadName = `t_108.${value}`
                         }
                     }
                 }
@@ -65,6 +90,10 @@ export default class AddPlugin {
         });
     }
 
+    /**
+     * Events
+     * @param {String} childFrameId 
+     */
     static events(childFrameId) {
         $(`#${childFrameId}`).bind(`${childFrameId}_save`, function (e) {
             let resultIdObject = JSON.parse(localStorage.getItem(`${childFrameId}_save`));

@@ -28,7 +28,7 @@
 }
 
 .taskcard {
-    height: 100px;
+    min-height: 100px;
     margin-bottom: 30px;
     text-align: left;
     padding: 0px;

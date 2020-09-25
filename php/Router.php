@@ -2,8 +2,9 @@
 
 //Post varibles
 session_start();
-if (!isset($_SESSION['UserId']))
+if (!isset($_SESSION['UserId'])) {
     die('No session!');
+}
 
 $userId = $_SESSION['UserId'];
 $module = $_POST['Module'];

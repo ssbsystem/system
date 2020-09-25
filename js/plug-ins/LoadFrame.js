@@ -143,7 +143,7 @@ export default class LoadFrame {
                 switch (itemId) {
                     case 'ap':
                         let fUserModuleId = $(`#${parentId}`).attr('f-user-module-id');
-                        AddPlugin.Integration(fUserModuleId);
+                        AddPlugin.Integration(fUserModuleId, 1);
                         break;
                 }
             }

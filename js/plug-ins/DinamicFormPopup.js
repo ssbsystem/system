@@ -9,6 +9,7 @@ import StepBox from './Input/StepBox.js';
 import SwitchPlugin from './SwitchPlugin.js';
 import AutoScroll from './AutoScroll.js';
 import AddInput from './objects/AddInput.js';
+import AddPlugin from './objects/AddPlugin.js';
 
 export default class DinamicFormPopup {
     static saveEventMax = 0;
@@ -41,7 +42,7 @@ export default class DinamicFormPopup {
      */
     events(frameId, parentFrameId, title, isFullscreen) {
         $(`#${parentFrameId}`).bind(`${parentFrameId}_open_form`, function () {
-            DinamicFormPopup.open(frameId, parentFrameId, title, isFullscreen);
+            DinamicFormPopup.open(frameId, parentFrameId, title, isFullscreen, true);
 
             let openFormData = {};
             openFormData = JSON.parse(localStorage.getItem(`${parentFrameId}_open_form`));
@@ -62,14 +63,22 @@ export default class DinamicFormPopup {
      * @param {String} title 
      * @param {String} isFullscreen 
      */
-    static open(frameId, parentFrameId, title, isFullscreen) {
+    static open(frameId, parentFrameId, title, isFullscreen, isAddPlugin = false) {
         document.getElementById(parentFrameId).insertAdjacentHTML(
             'beforeend',
             this.getFrame(frameId, title, isFullscreen)
         );
         document.getElementById(`${frameId}_data`).innerHTML = '<img class="loader-gif" src="images/gifs/loader.gif" alt="Italian Trulli"></img>';
 
+        if (localStorage.getItem('DevelopMode') === 'true' && isAddPlugin) {
+            document.getElementById(`${frameId}_cancel`).insertAdjacentHTML(
+                'beforebegin',
+                `<button id="${frameId}_dev_add_plugin" class="dev-btn">Add plugin</button>`
+            );
+        }
+
         this.setPopupSize(frameId);
+        AutoScroll.Integration(frameId);
     }
 
     /**
@@ -93,13 +102,6 @@ export default class DinamicFormPopup {
         parentFrameId
     ) {
         let plugin = JSON.parse(localStorage.getItem(frameId));
-
-        /*
-        if (plugin !== null) {
-            plugin = JSON.parse(plugin);
-            success(plugin);
-            return;
-        }*/
 
         let module = 'ModuleData';
         let data = {};
@@ -128,8 +130,23 @@ export default class DinamicFormPopup {
             let formData = plugin.Data['1'];
             let children = plugin.Data['Children'];
             let pluginTable = plugin.TableName;
+            let parentPluginId = '';
 
-            DinamicFormPopup.onLoad(formData, frameId, parentFrameId, children, entryIdJSON, pluginTable);
+            if (plugin.hasOwnProperty('FModulePluginId')) {
+                parentPluginId = plugin.FModulePluginId;
+            } else {
+                parentPluginId = plugin.FPluginPluginId;
+            }
+
+            DinamicFormPopup.onLoad(
+                formData,
+                frameId,
+                parentFrameId,
+                children,
+                entryIdJSON,
+                pluginTable,
+                parentPluginId
+            );
         }
     }
 
@@ -139,8 +156,8 @@ export default class DinamicFormPopup {
      * @param {String} frameId 
      * @param {JSON} entryId 
      */
-    static onLoad(formData, frameId, parentFrameId, children, entryId = null, pluginTable = null) {
-        AutoScroll.Integration(frameId);
+    static onLoad(formData, frameId, parentFrameId, children, entryId = null,
+        pluginTable = null, parentPluginId = null) {
 
         const dataFrameId = frameId + '_data';
 
@@ -163,8 +180,8 @@ export default class DinamicFormPopup {
         CardContainerPlus.Create(formInputs, dataFrameId, DinamicFormPopup.loadFormItem);
 
         if (localStorage.getItem('DevelopMode') === 'true') {
-            let FPluginFormInputId = formData.FPluginFormInputId;
-            AddInput.Integration(`${frameId}_data`, FPluginFormInputId, pluginTable);
+            let fPluginFormInputId = formData.FPluginFormInputId;
+            AddInput.Integration(`${frameId}_data`, fPluginFormInputId, pluginTable);
         }
 
         for (const plugin of children) {
@@ -180,23 +197,37 @@ export default class DinamicFormPopup {
         //Add click
         document.getElementById(frameId + '_cancel').addEventListener(
             'click',
-            function (e) {
+            function () {
                 DinamicFormPopup.cancel(frameId);
             }
         );
 
         document.getElementById(frameId + '_save').addEventListener(
             'click',
-            function (e) {
+            function () {
                 //Save default inputs in form
                 DinamicFormPopup.save(frameId, parentFrameId, entryId);
             }
         );
 
+        if (localStorage.getItem('DevelopMode') === 'true' &&
+            parentPluginId !== null) {
+            document.getElementById(frameId + '_dev_add_plugin').addEventListener(
+                'click',
+                function () {
+                    //Save default inputs in form
+                    AddPlugin.Integration(parentPluginId, 2)
+                }
+            );
+        }
+
         document.onkeydown = function (e) {
-            switch (e.code) {
+            switch (e.key) {
                 case 'Escape':
                     DinamicFormPopup.cancel(frameId);
+                    break;
+                case 'Enter':
+                    DinamicFormPopup.save(frameId);
                     break;
             }
         }

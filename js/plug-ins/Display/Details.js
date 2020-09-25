@@ -4,6 +4,7 @@ import CreateDBox from "../CreateDBox.js";
 import AutoScroll from "../AutoScroll.js";
 import SwitchPlugin from "../SwitchPlugin.js";
 import FillCard from "../objects/FillCard.js";
+import AddPlugin from "../objects/AddPlugin.js";
 
 export default class Details {
     /**
@@ -129,6 +130,7 @@ export default class Details {
         <div class="position-absolute">
             <button id="${frameId}_edit_details_1">Details1</button>
             <button id="${frameId}_edit_details_2">Details2</button>
+            <button id="${frameId}_add_plugin">AP</button>
         </div>
         `
     }
@@ -151,6 +153,11 @@ export default class Details {
 
             let fPluginDisplayId2 = plugin.Data['2'].FPluginDisplayId;
             FillCard.Integrate(card, fPluginDisplayId2, true);
+        });
+
+        document.getElementById(`${frameId}_add_plugin`).addEventListener('click', function () {
+            let fModulePluginId = plugin.FModulePluginId;
+            AddPlugin.Integration(fModulePluginId, 2);
         });
     }
     /**
