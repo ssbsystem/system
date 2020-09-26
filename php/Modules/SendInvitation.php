@@ -37,8 +37,8 @@ class SendEmail
 
 
 		foreach ($statement as $result) {
-		$userFName = $result['FirstName']; //Emailbe megszólításhoz
-		$userEmail = $result['Email'];
+			$userFName = $result['FirstName']; //Emailbe megszólításhoz
+			$userEmail = $result['Email'];
 		}
 
 		$query = "SELECT 
@@ -54,9 +54,9 @@ class SendEmail
 
 		$statement = $this->pdo->prepare($query);
 		$statement->execute(
-		array(
-			':useremail'	=>	$userEmail
-		)
+			array(
+				':useremail'	=>	$userEmail
+			)
 		);
 
 		$no_of_row = $statement->rowCount();
@@ -65,19 +65,37 @@ class SendEmail
 			$main_data['Message'] = "Invitation failed: email already exists!";
 			$main_data['Result'] = 'E';
 		} else {
+			$user_actcode_seed = rand(100000,999999);
+			$user_activation_code = hash('sha256', $user_actcode_seed);
+
+			$insert_query = "
+			UPDATE t_200
+			SET c_77 = :user_activation_code, c_78=0
+			WHERE c_76 = :user_email
+			";
+
+			$statement = $this->pdo->prepare($insert_query);
+	
+			$statement->execute(
+				array(
+					':user_email'			=>	$userEmail,
+					':user_activation_code'	=>	$user_activation_code
+				)
+			);
+
+			$base_url = "https://ssbs.ssbsystem.com/";
+			$newPassword = TRUE;
 			$host = $_SERVER['HTTP_HOST'];
+			$invitationLink = "$host/login.php?act_code=$user_activation_code&new_pass=$newPassword";
 			if ($host=="localhost") {
-				$main_data['Message'] = "Would send invitation for " . $userEmail;
+				$main_data['Message'] = "Would send invitation for $userEmail link: $invitationLink";
 				$main_data['Result'] = 'S';
 			}else {
 
 				/* EMAIL KÜLDÉS MAJD A SZERVEREN (phpMailer be kell húzni még)  */       	;
-
-				$base_url = "https://ssbsystem.com/";
-				$invitationURL = $base_url . "login.php";
 				require_once('php/EmailTemplates.php');
 				$emailTemplates = new EmailTemplates();
-				$mail_body = $emailTemplates->invitationHU($userFName, $invitationURL, $userEmail);
+				$mail_body = $emailTemplates->invitationHU($userFName, $invitationLink, $userEmail);
 
 				$mail = new PHPMailer;
 
