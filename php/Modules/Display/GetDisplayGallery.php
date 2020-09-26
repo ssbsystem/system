@@ -23,28 +23,18 @@ class DisplayGallery
         $photos = array();
         // $main_data = $getData->Create($fModulePluginFK, $fPluginPluginFK, $fCustomPluginId, $pluginTable);
 
-        $imgUrl = 'C:/ssbs/resize_image_test/images/';
+        $imgUrl = 'uploads/img/';
 
         $photo = array();
 
         $photo['PhotoId'] = '1';
         $photo['PhotoURL'] = $imgUrl;
-        $photo['PhotoName'] = 'testpic1.jpg';
+        $photo['PhotoName'] = '551.jpg';
         array_push($photos, $photo);
 
         $photo['PhotoId'] = '2';
         $photo['PhotoURL'] = $imgUrl;
-        $photo['PhotoName'] = 'testpic2.jpg';
-        array_push($photos, $photo);
-
-        $photo['PhotoId'] = '3';
-        $photo['PhotoURL'] = $imgUrl;
-        $photo['PhotoName'] = 'testpic3.jpg';
-        array_push($photos, $photo);
-
-        $photo['PhotoId'] = '4';
-        $photo['PhotoURL'] = $imgUrl;
-        $photo['PhotoName'] = 'testpic4.jpg';
+        $photo['PhotoName'] = 'CB042.jpg';
         array_push($photos, $photo);
 
         $main_data = array();
@@ -53,10 +43,10 @@ class DisplayGallery
         $main_data[1]['Title'] = "Galéria";
 
         if (isset(ModuleMetaData::$uplodedData['isDownload'])) {
-            if (ModuleMetaData::$uplodedData['isDownload']==true) {
+            if (ModuleMetaData::$uplodedData['isDownload'] == true) {
                 $main_data[1]['Display']['Data'] = $imagetoBlob->Create($photos);
             }
-        }else {
+        } else {
             $main_data[1]['Display']['Data'] = [];
         }
 

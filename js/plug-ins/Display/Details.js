@@ -106,7 +106,7 @@ export default class Details {
 
         if (localStorage.getItem(`${parentFrameId}_edit_mode`) === 'true') {
             document.getElementById(frameId).insertAdjacentHTML(
-                'beforeend',
+                'afterend',
                 `<button id="${frameId}_edit_btn" class="fixededitbutton">Edit<i class="far fa-edit"></i></button>`
             )
 

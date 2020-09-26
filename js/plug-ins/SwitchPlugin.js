@@ -98,8 +98,8 @@ export default class SwitchPlugin {
                 Promise.all([
                     import('./Display/DisplayGallery.js'),
                 ]).then(([Module]) => {
-                    let Gallery = Module.default;
-                    new Gallery(plugin, frameId, parentFrameId);
+                    let DisplayGallery = Module.default;
+                    new DisplayGallery(plugin, frameId, parentFrameId);
                 });
                 break;
             /** Logout */

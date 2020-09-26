@@ -71,6 +71,7 @@ export default class Gallery {
             for (let i = 0; i < fLength; i++) {
                 const file = files[i];
                 let url = URL.createObjectURL(file);
+                console.log(file);
 
                 let reader = new FileReader();
 
@@ -86,9 +87,18 @@ export default class Gallery {
                             <a href="${url}" target="_blank"><img class="gallery-item" src="${url}"></a><div>`
                     );
 
+
+                    
+                    //upload img DB
+
+
+
+                    detailsIdData = JSON.parse(localStorage.getItem(`${parentFrameId}_data_details_id`));
+
+                    /*
                     if (fLength - 1 === i) {
                         localStorage.setItem(`${frameId}_upload_gallary`, JSON.stringify(changeData));
-                    }
+                    }*/
                 }
 
                 if (file) {

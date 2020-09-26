@@ -66,10 +66,10 @@ export default class DisplayGallery {
     static isIterable(obj) {
         // checks for null and undefined
         if (obj == null) {
-          return false;
+            return false;
         }
         return typeof obj[Symbol.iterator] === 'function';
-      }
+    }
 
     static getImage(frameId, object) {
         let imgId = object["imgId"];
@@ -77,21 +77,25 @@ export default class DisplayGallery {
         let imgAlt = object["imgAlt"];
 
         return `
-            <div class="row">
-                <div class="col-12 gallery-image-container">
-                    <div class="d-flex justify-content-center gallery-image-content">
-                        <img src="${blobFile}" id=${frameId}_${imgId} class="img-fluid" alt="${imgAlt}">
-                    </div>
-                    <div class="d-flex justify-content-center gallery-image-footer">
-                        <p>${imgAlt}</p>
-                    </div>
-                </div>
+            <div id=${frameId}_${imgId} class="gallery-image-content display-flex flex-column  justify-content-center" style="background: url(${blobFile}) no-repeat center center;" alt="${imgAlt}">
+                <p class="position-absolute">${imgAlt}</p>
             </div>
             `;
+        /*
+                return `
+                        <div class="gallery-image-container">
+                            <div class="gallery-image-content display-flex flex-column  justify-content-center">
+                                <img src="${tmpPath}" id=${frameId}_${imgId} class="img-fluid" alt="${imgAlt}">
+                            </div>
+                            <div class="gallery-image-footer">
+                                <p>${imgAlt}</p>
+                            </div>
+                        </div>
+                    `;*/
     }
 
 
-        /**
+    /**
      * Events
      * @param {JSON} plugin 
      * @param {String} frameId 
@@ -115,7 +119,6 @@ export default class DisplayGallery {
 
             let uploadData = {};
             let className = 'ModuleData';
-
 
             uploadData['isDownload'] = true;
             uploadData['RequestType'] = 'PP';
