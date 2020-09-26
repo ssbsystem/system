@@ -1,7 +1,7 @@
 <?php
 
 $dirname = "php/uploads/img/";
-$imageArray = glob($dirname . "*.jpg");
+$imageArray = glob($dirname . "*.*");
 
 foreach ($imageArray as $image_name) {
   $imgParts = pathinfo($image_name);
@@ -24,7 +24,7 @@ foreach ($imageArray as $image_name) {
   }
 
   // Use imagescale() function to scale the image 
-  $img = imagescale($image, 500, 500);
+  $img = imagescale($image, 250, 250);
 
   // Output image in the browser 
   ob_start();

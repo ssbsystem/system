@@ -241,13 +241,14 @@ export default class DinamicFormPopup {
      */
     static placeSwitch(place, targetId, childFrameId) {
         let readyHTML;
-        /*
+
         switch (place) {
+            case '0':
+                return;
             case '1':
                 readyHTML = `<div id="${childFrameId}" class="new-obj-shell col-12 col-xl-6 full-height"></div>`;
-        }*/
-        readyHTML = `<div id="${childFrameId}" class="new-obj-shell col-12 col-xl-6 full-height"></div>`;
-
+                break;
+        }
 
         document.getElementById(targetId).insertAdjacentHTML(
             'beforeend',
