@@ -120,6 +120,10 @@ export default class DisplayGallery {
             let uploadData = {};
             let className = 'ModuleData';
 
+            let changeItem = JSON.parse(localStorage.getItem(`14_data_details_id`));
+            uploadData['newItemId'] = changeItem['Id'];
+            uploadData['newItemColumn'] = changeItem['IdColumn'];
+
             uploadData['isDownload'] = true;
             uploadData['RequestType'] = 'PP';
             uploadData['FPluginPluginId'] = plugin['FPluginPluginId'];

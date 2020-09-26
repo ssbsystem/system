@@ -20,22 +20,61 @@ class DisplayGallery
         // require_once('Modules/GetData.php');
         // $getData = new GetData('ManualFiltering', false);
 
-        $photos = array();
+        
         // $main_data = $getData->Create($fModulePluginFK, $fPluginPluginFK, $fCustomPluginId, $pluginTable);
 
-        $imgUrl = 'uploads/img/';
+        // if (isset(ModuleMetaData::$uplodedData['IdOfData'])) {
+            
+        //     $id=ModuleMetaData::$uplodedData['IdOfData'];
+        //     $imgUrl = 'C:/ssbs/system/php/uploads/img/';
+        //     switch ($id) {
+        //         case '1':
+        //             $imgUrl = 'C:/ssbs/system/php/uploads/img/';
+        //             break;
+        //         default:
+        //             $imgUrl = 'C:/ssbs/system/php/uploads/img/551.jpg';
+        //             break;
+        //     }
+        // }
 
-        $photo = array();
+        // $imgUrl = 'uploads/img/551.jpg';
 
-        $photo['PhotoId'] = '1';
-        $photo['PhotoURL'] = $imgUrl;
-        $photo['PhotoName'] = '551.jpg';
-        array_push($photos, $photo);
+        // $photo = array();
+        // $photos = array();
 
-        $photo['PhotoId'] = '2';
-        $photo['PhotoURL'] = $imgUrl;
-        $photo['PhotoName'] = 'CB042.jpg';
-        array_push($photos, $photo);
+        // $photo['PhotoId'] = '1';
+        // $photo['PhotoURL'] = $imgUrl;
+        // $photo['PhotoName'] = '551.jpg';
+        // array_push($photos, $photo);
+
+        // $photo['PhotoId'] = '2';
+        // $photo['PhotoURL'] = $imgUrl;
+        // $photo['PhotoName'] = 'CB042.jpg';
+        // array_push($photos, $photo);
+        if (isset(ModuleMetaData::$uplodedData['newItemId']) && isset(ModuleMetaData::$uplodedData['newItemColumn'])) {
+            $cardId = ModuleMetaData::$uplodedData['newItemId'];
+            $cardColumn = ModuleMetaData::$uplodedData['newItemColumn'];
+            list($table, $column) = explode(".", $cardColumn);
+
+            $query = "SELECT 
+                    c_112_id,
+                    c_80 AS isGallery,
+                    c_81 AS galleryURL,
+                    c_108_fk
+                FROM t_112 LEFT JOIN $table ON $table.c_112_FK=t_112.c_112_id
+                WHERE $table.$column = :id";
+
+            $statement = $this->pdo->prepare($query);
+            $statement->execute(
+                array(
+                    ':id'	=>	$cardId
+                )
+            );
+            foreach ($statement as $gallery) {
+                $databaseURL = $gallery['galleryURL'];
+            }
+            
+        }
 
         $main_data = array();
 
@@ -44,7 +83,7 @@ class DisplayGallery
 
         if (isset(ModuleMetaData::$uplodedData['isDownload'])) {
             if (ModuleMetaData::$uplodedData['isDownload'] == true) {
-                $main_data[1]['Display']['Data'] = $imagetoBlob->Create($photos);
+                $main_data[1]['Display']['Data'] = $imagetoBlob->Create($databaseURL);
             }
         } else {
             $main_data[1]['Display']['Data'] = [];

@@ -7,6 +7,11 @@ foreach ($imageArray as $image_name) {
   $imgParts = pathinfo($image_name);
   $imgExtension = $imgParts['extension'];
 
+  /* To reserve aspect ratio*/
+  list($width, $height) = getimagesize($image_name);
+  $newheight = 200;       // Fixed new heigth for every photo in px
+  $newwidth = $width / ($height / $newheight);
+
   // Load image file
   switch ($imgExtension) {
     case 'jpg':
@@ -24,7 +29,7 @@ foreach ($imageArray as $image_name) {
   }
 
   // Use imagescale() function to scale the image 
-  $img = imagescale($image, 250, 250);
+  $img = imagescale($image, $newwidth, $newheight);
 
   // Output image in the browser 
   ob_start();
