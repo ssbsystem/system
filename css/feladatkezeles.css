@@ -280,11 +280,16 @@
     padding-top: 48%;
     position: relative;
     margin: 1%;
-    background-size: cover;
-    background-position: center center;
+    background-size: cover !important;
+    background-position: center center !important;
     float: left;
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.gallery-image-content.sm {
+    width: 24%;
+    padding-top: 24%;
 }
 
 .gallery-image-content p {

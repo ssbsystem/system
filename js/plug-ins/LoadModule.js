@@ -65,7 +65,7 @@ let Framework = {
     LoadGrid: function (plugins, frameId, parentFrameId) {
         //Load module frame
         document.getElementById(parentFrameId).innerHTML =
-            `<div id="${frameId}" class="display-flex flex-row full-screen"></div>`;
+            `<div id="${frameId}" class="display-flex flex-row full-screen position-relative"></div>`;
 
         //Define SwitchPlugin
         let switchPlugin = new SwitchPlugin();

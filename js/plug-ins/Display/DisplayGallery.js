@@ -51,6 +51,14 @@ export default class DisplayGallery {
         let frameElement = document.getElementById(frameId);
         // frameElement.classList.add('task-timeline');
 
+        if (contentData === undefined) {
+            return;
+        }
+
+        if (!contentData.hasOwnProperty('Data')) {
+            return;
+        }
+
         let data = contentData.Data;
         if (DisplayGallery.isIterable(data)) {
             for (const object of data) {
@@ -77,21 +85,10 @@ export default class DisplayGallery {
         let imgAlt = object["imgAlt"];
 
         return `
-            <div id=${frameId}_${imgId} class="gallery-image-content display-flex flex-column  justify-content-center" style="background: url(${blobFile}) no-repeat center center;" alt="${imgAlt}">
+            <div id=${frameId}_${imgId} class="gallery-image-content display-flex flex-column justify-content-center" style="background: url(${blobFile}) no-repeat center center;" alt="${imgAlt}">
                 <p class="position-absolute">${imgAlt}</p>
             </div>
             `;
-        /*
-                return `
-                        <div class="gallery-image-container">
-                            <div class="gallery-image-content display-flex flex-column  justify-content-center">
-                                <img src="${tmpPath}" id=${frameId}_${imgId} class="img-fluid" alt="${imgAlt}">
-                            </div>
-                            <div class="gallery-image-footer">
-                                <p>${imgAlt}</p>
-                            </div>
-                        </div>
-                    `;*/
     }
 
 
@@ -111,19 +108,19 @@ export default class DisplayGallery {
             AutoScroll.Integration(`${parentFrameId}_content`);
         });
 
-        $(`#${parentFrameId}`).bind(`${parentFrameId}_change_details_co`, function (e) {
+        $(`#${parentFrameId}`).bind(`${parentFrameId}_change_details_co`, function () {
             let changeData = {};
             changeData.PluginNumber = plugin.Number;
             localStorage.setItem(`${parentFrameId}_child_loaded`, JSON.stringify(changeData));
             $(`#${parentFrameId}`).trigger(`${parentFrameId}_child_loaded`);
 
+            let moduleFrameId = parentFrameId.split('_')[0];
+
             let uploadData = {};
             let className = 'ModuleData';
-
-            let changeItem = JSON.parse(localStorage.getItem(`14_data_details_id`));
+            let changeItem = JSON.parse(localStorage.getItem(`${moduleFrameId}_data_details_id`));
             uploadData['newItemId'] = changeItem['Id'];
             uploadData['newItemColumn'] = changeItem['IdColumn'];
-
             uploadData['isDownload'] = true;
             uploadData['RequestType'] = 'PP';
             uploadData['FPluginPluginId'] = plugin['FPluginPluginId'];
@@ -141,8 +138,6 @@ export default class DisplayGallery {
                 },
                 dataType: 'json'
             });
-
-
         });
     }
 

@@ -24,29 +24,7 @@ class ImagetoBlob
             $main_data = $this->CreateBlobFromImage($imgUrl);
         }
         
-
         return $main_data;
-
-        /*
-        $main_data = array();
-        $pData = array();
-
-        foreach ($photos as $photo) {
-            $path = $photo['PhotoURL'] . $photo['PhotoName'];
-            $type = pathinfo($path, PATHINFO_EXTENSION);
-            $photodata = file_get_contents($path);
-            $base64 = 'data:image/' . $type . ';base64,' . base64_encode($photodata);
-            
-            $pData['imgId'] = $photo['PhotoId'];
-            $pData['imgBlob'] = $base64;
-            $pData['imgAlt'] = $photo['PhotoName'];
-
-            array_push($main_data, $pData);
-
-        }
-        
-        return $main_data;*/
-
     }
     public function CreateBlobFromImage($imgUrl)
     {

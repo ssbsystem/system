@@ -22,7 +22,7 @@ export default class DinamicFormPopup {
      */
     constructor(plugin, frameId, parentFrameId) {
         const title = plugin['Plugin name'];
-        let isFullscreen = true;
+        let isFullscreen = false;
         if (plugin.Data.Children.length === 0) {
             isFullscreen = false;
         }
@@ -42,16 +42,18 @@ export default class DinamicFormPopup {
      */
     events(frameId, parentFrameId, title, isFullscreen) {
         $(`#${parentFrameId}`).bind(`${parentFrameId}_open_form`, function () {
-            DinamicFormPopup.open(frameId, parentFrameId, title, isFullscreen, true);
-
             let openFormData = {};
             openFormData = JSON.parse(localStorage.getItem(`${parentFrameId}_open_form`));
 
             let detailsIdData = null;
+
             if (openFormData.Type === 'update') {
                 detailsIdData = JSON.parse(localStorage.getItem(`${parentFrameId}_data_details_id`));
+            } else if (openFormData.Type === 'new') {
+                isFullscreen = false;
             }
 
+            DinamicFormPopup.open(frameId, parentFrameId, title, isFullscreen, true);
             DinamicFormPopup.loadFormData(frameId, detailsIdData, parentFrameId);
         });
     }
@@ -128,9 +130,13 @@ export default class DinamicFormPopup {
 
         function success(plugin, entryIdJSON, parentFrameId) {
             let formData = plugin.Data['1'];
-            let children = plugin.Data['Children'];
+            let children = [];
             let pluginTable = plugin.TableName;
             let parentPluginId = '';
+
+            if (entryIdJSON !== null) {
+                children = plugin.Data['Children'];
+            }
 
             if (plugin.hasOwnProperty('FModulePluginId')) {
                 parentPluginId = plugin.FModulePluginId;
@@ -246,7 +252,7 @@ export default class DinamicFormPopup {
             case '0':
                 return;
             case '1':
-                readyHTML = `<div id="${childFrameId}" class="new-obj-shell col-12 col-xl-6 full-height"></div>`;
+                readyHTML = `<div id="${childFrameId}" class="new-obj-shell col-12 full-height"></div>`;
                 break;
         }
 

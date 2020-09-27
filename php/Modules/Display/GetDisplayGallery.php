@@ -20,11 +20,11 @@ class DisplayGallery
         // require_once('Modules/GetData.php');
         // $getData = new GetData('ManualFiltering', false);
 
-        
+
         // $main_data = $getData->Create($fModulePluginFK, $fPluginPluginFK, $fCustomPluginId, $pluginTable);
 
         // if (isset(ModuleMetaData::$uplodedData['IdOfData'])) {
-            
+
         //     $id=ModuleMetaData::$uplodedData['IdOfData'];
         //     $imgUrl = 'C:/ssbs/system/php/uploads/img/';
         //     switch ($id) {
@@ -51,12 +51,19 @@ class DisplayGallery
         // $photo['PhotoURL'] = $imgUrl;
         // $photo['PhotoName'] = 'CB042.jpg';
         // array_push($photos, $photo);
-        if (isset(ModuleMetaData::$uplodedData['newItemId']) && isset(ModuleMetaData::$uplodedData['newItemColumn'])) {
-            $cardId = ModuleMetaData::$uplodedData['newItemId'];
-            $cardColumn = ModuleMetaData::$uplodedData['newItemColumn'];
-            list($table, $column) = explode(".", $cardColumn);
 
-            $query = "SELECT 
+        $main_data = array();
+        $main_data[1]['Title'] = "Galéria";
+
+        if (!(isset(ModuleMetaData::$uplodedData['newItemId']) && isset(ModuleMetaData::$uplodedData['newItemColumn']))) {
+            return $main_data;
+        }
+
+        $cardId = ModuleMetaData::$uplodedData['newItemId'];
+        $cardColumn = ModuleMetaData::$uplodedData['newItemColumn'];
+        list($table, $column) = explode(".", $cardColumn);
+
+        $query = "SELECT 
                     c_112_id,
                     c_80 AS isGallery,
                     c_81 AS galleryURL,
@@ -64,22 +71,17 @@ class DisplayGallery
                 FROM t_112 LEFT JOIN $table ON $table.c_112_FK=t_112.c_112_id
                 WHERE $table.$column = :id";
 
-            $statement = $this->pdo->prepare($query);
-            $statement->execute(
-                array(
-                    ':id'	=>	$cardId
-                )
-            );
-            foreach ($statement as $gallery) {
-                $databaseURL = $gallery['galleryURL'];
-            }
-            
+        $statement = $this->pdo->prepare($query);
+        $statement->execute(
+            array(
+                ':id'    =>    $cardId
+            )
+        );
+        foreach ($statement as $gallery) {
+            $databaseURL = $gallery['galleryURL'];
         }
 
-        $main_data = array();
-
         $imagetoBlob = new ImagetoBlob();
-        $main_data[1]['Title'] = "Galéria";
 
         if (isset(ModuleMetaData::$uplodedData['isDownload'])) {
             if (ModuleMetaData::$uplodedData['isDownload'] == true) {

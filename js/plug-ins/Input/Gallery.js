@@ -1,34 +1,102 @@
 import AutoScroll from "../AutoScroll.js";
-import FormInputs from "../../designs/FormInputs.js";
-import JSONToUpload from "../JSONToUpload.js";
+import DataURLToBlob from "../objects/DataURLToBlob.js";
 
 export default class Gallery {
     /**
      * Constructor
      * ------------------------------
+     * **Values**
+     * *Import*
+     * *Export*
+     * ------------------------------
      * **Events**
-     * 
+     * *Bind*
+     * Name: <parentFrameId>_save - Save event
+     * *Trigger*
+     * Name: <parentFrameId>_child_loaded - Child loaded
+     * Name: <parentFrameId>_save_end - End of the save event
      * ------------------------------
      * @param {JSON} plugin 
      * @param {String} frameId 
      * @param {String} parentFrameId 
      */
     constructor(plugin, frameId, parentFrameId) {
-        Gallery.load(frameId);
+        Gallery.load(plugin, frameId, parentFrameId);
         this.events(plugin, parentFrameId, frameId);
     }
 
-    /** Frame **/
     /**
-     * load
+     * Load
+     * @param {JSON} plugin 
+     * @param {String} frameId 
+     * @param {String} parentFrameId 
      */
-    static load(frameId) {
+    static load(plugin, frameId, parentFrameId) {
         document.getElementById(frameId).insertAdjacentHTML(
             'beforeend',
             this.getFrameHTML(frameId)
         );
 
+        let changeData = {};
+        changeData.PluginNumber = plugin.Number;
+        localStorage.setItem(`${parentFrameId}_child_loaded`, JSON.stringify(changeData));
+        $(`#${parentFrameId}`).trigger(`${parentFrameId}_child_loaded`);
+
+        let moduleFrameId = parentFrameId.split('_')[0];
+
+        let uploadData = {};
+        let className = 'GetImages';
+
+        let changeItem = JSON.parse(localStorage.getItem(`${moduleFrameId}_data_details_id`));
+        uploadData['newItemId'] = changeItem['Id'];
+        uploadData['newItemColumn'] = changeItem['IdColumn'];
+        $.ajax({
+            type: "POST",
+            url: "./php/Router.php",
+            data: { 'Module': className, 'Data': uploadData },
+            success: function (result) {
+                console.log(JSON.stringify(result));
+
+                let images = result.Images;
+                Gallery.createContent(images, frameId);
+            },
+            dataType: 'json'
+        });
+
         AutoScroll.Integration(`${frameId}_cont`);
+    }
+
+    /**
+     * Create Content
+     * @param {JSON} images 
+     * @param {String} frameId 
+     */
+    static createContent(images, frameId) {
+        for (const image of images) {
+            document.getElementById(`${frameId}_cont`).insertAdjacentHTML(
+                'beforeend',
+                Gallery.getImage(frameId, image)
+            )
+        }
+    }
+
+    /**
+     * Get Image
+     * @param {String} frameId 
+     * @param {JSON} imageData 
+     */
+    static getImage(frameId, imageData) {
+        let blobString = imageData.imgBlob;
+        let blobFile = DataURLToBlob.Create(blobString);
+        let url = window.URL.createObjectURL(blobFile);
+        let imgId = imageData.imgId;
+        let imgAlt = imageData.imgAlt;
+
+        return `
+            <div id=${frameId}_${imgId} class="gallery-image-content sm display-flex flex-column justify-content-center" style="background: url(${url}) no-repeat center center;" alt="${imgAlt}">
+                <p class="position-absolute">${imgAlt}</p>
+            </div>
+            `;
     }
 
     /**
@@ -63,7 +131,6 @@ export default class Gallery {
         });
 
         let changeData = {};
-        //changeData.Remove = [];
         changeData.Add = [];
         $(`#${frameId}_add_input`).bind('change', function () {
             let files = document.getElementById(`${frameId}_add_input`).files;
@@ -88,12 +155,76 @@ export default class Gallery {
                     );
 
 
-                    
                     //upload img DB
 
 
 
-                    detailsIdData = JSON.parse(localStorage.getItem(`${parentFrameId}_data_details_id`));
+                    let detailsIdData = JSON.parse(localStorage.getItem(`${parentFrameId}_data_details_id`));
+
+
+
+                    let uploadData = {};
+                    let className = 'UploadImages';
+
+                    uploadData = JSON.parse(localStorage.getItem(`${frameId}_upload_gallary`));
+
+                    let formData = new FormData();
+                    formData.append('Module', className);
+                    uploadData['FileToUpload'] = [];
+
+                    for (let i = 0; i < uploadData.Add.length; i++) {
+                        const fileItem = uploadData.Add[i];
+
+                        let fileName = fileItem.FileName;
+                        let imageURL = fileItem.Source;
+                        // Split the base64 string in data and contentType
+                        let block = imageURL.split(";");
+                        // Get the content type
+                        let contentType = block[0].split(":")[1];// In this case "image/gif"
+                        // get the real base64 content of the file
+                        let realData = block[1].split(",")[1];// In this case "iVBORw0KGg...."
+
+                        // Convert to blob
+                        let blob = Gallery.b64toBlob(realData, contentType);
+
+                        formData.append(`Gallery_${i}`, blob, fileName);
+                        uploadData['FileToUpload'].push(`Gallery_${i}`)
+                    }
+
+                    formData.append('Data', JSON.stringify(uploadData));
+
+
+                    $.ajax({
+                        type: "POST",
+                        url: "./php/Router.php",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        cache: false,
+                        success: function (result) {
+                            let tableResultData = {};
+                            console.log(result);
+
+                            for (const table in result[0]) {
+                                if (result[0].hasOwnProperty(table)) {
+                                    tableResultData = result[0][table];
+                                }
+                            }
+
+                            //if (tableResultData['Result'] === 'S') {
+                            if (true) {
+                                $(`#${parentFrameId}`).trigger(`${parentFrameId}_save_end`);
+                            } else {
+                                Swal.fire({
+                                    type: 'error',
+                                    title: 'Sikertelen',
+                                    text: 'A galéria feltöltése sikertelen volt!',
+                                    heightAuto: false
+                                });
+                            }
+                        },
+                        dataType: 'json'
+                    });
 
                     /*
                     if (fLength - 1 === i) {
@@ -130,9 +261,6 @@ export default class Gallery {
                     <input type="file" id="${frameId}_add_input" class="custom-input" multiple
                         accept="image/x-png,image/gif,image/jpeg"/>
                 </div>
-            </div>
-            <div id="ntsk_steps_footer">
-                <button type="reset" id="ntsk_steps_trash_btn_2" class="btn btn-primary grey-button"><i class="fas fa-trash-alt"></i></button>
             </div>`
     }
 
@@ -224,23 +352,23 @@ export default class Gallery {
         contentType = contentType || '';
         sliceSize = sliceSize || 512;
 
-        var byteCharacters = atob(b64Data);
-        var byteArrays = [];
+        let byteCharacters = atob(b64Data);
+        let byteArrays = [];
 
-        for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-            var slice = byteCharacters.slice(offset, offset + sliceSize);
+        for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+            let slice = byteCharacters.slice(offset, offset + sliceSize);
 
-            var byteNumbers = new Array(slice.length);
-            for (var i = 0; i < slice.length; i++) {
+            let byteNumbers = new Array(slice.length);
+            for (let i = 0; i < slice.length; i++) {
                 byteNumbers[i] = slice.charCodeAt(i);
             }
 
-            var byteArray = new Uint8Array(byteNumbers);
+            let byteArray = new Uint8Array(byteNumbers);
 
             byteArrays.push(byteArray);
         }
 
-        var blob = new Blob(byteArrays, { type: contentType });
+        let blob = new Blob(byteArrays, { type: contentType });
         return blob;
     }
 }

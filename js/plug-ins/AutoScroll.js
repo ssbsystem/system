@@ -12,15 +12,15 @@ class AutoScroll {
      * @param {String} elementId 
      */
     static Integration(elementId) {
-        if (document.getElementById(elementId)===null) {
+        if (document.getElementById(elementId) === null) {
             console.warn('Not found target in AutoScroll.');
             return;
         }
 
         let element = $("#" + elementId);
         let parent = element.parent();
-        let sHeight = parent.outerHeight() - parent.innerHeight() 
-                        + parent.height();
+        let sHeight = parent.outerHeight() - parent.innerHeight()
+            + parent.height();
 
         parent.children().each(function () {
             if ($(this).attr('id') !== element.attr('id'))
