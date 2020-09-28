@@ -1,5 +1,6 @@
 import DetailsDesigns from "../../designs/DetailsDesigns.js";
 import AutoScroll from "../AutoScroll.js";
+import DataURLToBlob from "../objects/DataURLToBlob.js";
 
 export default class DisplayGallery {
     /**
@@ -21,6 +22,13 @@ export default class DisplayGallery {
         $(`#${parentFrameId}`).trigger(`${parentFrameId}_child_loaded`);
     }
 
+    /**
+     * Create
+     * @param {JSON} plugin 
+     * @param {String} frameId 
+     * @param {String} parentFrameId 
+     * @param {String} titleFrameId 
+     */
     static create(plugin, frameId, parentFrameId, titleFrameId) {
         //Tab title
         document.getElementById(titleFrameId).insertAdjacentHTML(
@@ -29,7 +37,7 @@ export default class DisplayGallery {
         )
         document.getElementById(`${frameId}_tab`).addEventListener(
             'click',
-            function (e) {
+            function () {
                 $(`.${parentFrameId}_tab`).removeClass('btn-detail-menu-active');
                 $(`.${parentFrameId}_content`).hide();
                 $(`#${frameId}`).show();
@@ -37,55 +45,39 @@ export default class DisplayGallery {
             }
         )
 
-        //Tab content
-        let contentData = plugin.Data['1'].Display;
-        let detailsObjectFrame = DetailsDesigns.getSimpleObjectFrame(frameId);
-        let detailsObject = DetailsDesigns.getDefaultObject(frameId);
-
-        /*
-        let createDBox = new CreateDBox();
-        createDBox.create(contentData, detailsObjectFrame, detailsObject, frameId);*/
-        DisplayGallery.createContent(contentData, frameId);
+        DisplayGallery.loadImages(frameId, parentFrameId);
     }
-    static createContent(contentData, frameId) {
+
+    /**
+     * Create Content
+     * @param {JSON} images 
+     * @param {String} frameId 
+     */
+    static createContent(images, frameId) {
         let frameElement = document.getElementById(frameId);
         // frameElement.classList.add('task-timeline');
-
-        if (contentData === undefined) {
+        if (images === undefined || images === null) {
             return;
         }
 
-        if (!contentData.hasOwnProperty('Data')) {
-            return;
+        for (const image of images) {
+            //step number & name
+            frameElement.insertAdjacentHTML(
+                'beforeend',
+                DisplayGallery.getImage(frameId, image)
+            )
         }
-
-        let data = contentData.Data;
-        if (DisplayGallery.isIterable(data)) {
-            for (const object of data) {
-                //step number & name
-                frameElement.insertAdjacentHTML(
-                    'beforeend',
-                    DisplayGallery.getImage(frameId, object)
-                )
-            }
-        }
-
-    }
-    static isIterable(obj) {
-        // checks for null and undefined
-        if (obj == null) {
-            return false;
-        }
-        return typeof obj[Symbol.iterator] === 'function';
     }
 
-    static getImage(frameId, object) {
-        let imgId = object["imgId"];
-        let blobFile = object["imgBlob"];
-        let imgAlt = object["imgAlt"];
+    static getImage(frameId, imageData) {
+        let imgId = imageData.imgId;
+        let imgAlt = imageData.imgAlt;
+        let blobString = imageData.imgBlob;
+        let blobFile = DataURLToBlob.Create(blobString);
+        let url = window.URL.createObjectURL(blobFile);
 
         return `
-            <div id=${frameId}_${imgId} class="gallery-image-content display-flex flex-column justify-content-center" style="background: url(${blobFile}) no-repeat center center;" alt="${imgAlt}">
+            <div id=${frameId}_${imgId} class="gallery-image-content display-flex flex-column justify-content-center" style="background: url(${url}) no-repeat center center;" alt="${imgAlt}">
                 <p class="position-absolute">${imgAlt}</p>
             </div>
             `;
@@ -114,26 +106,36 @@ export default class DisplayGallery {
             localStorage.setItem(`${parentFrameId}_child_loaded`, JSON.stringify(changeData));
             $(`#${parentFrameId}`).trigger(`${parentFrameId}_child_loaded`);
 
-            let moduleFrameId = parentFrameId.split('_')[0];
-
-            let uploadData = {};
-            let className = 'GetImages';
-            let changeItem = JSON.parse(localStorage.getItem(`${moduleFrameId}_data_details_id`));
-            uploadData['newItemId'] = changeItem['Id'];
-            uploadData['newItemColumn'] = changeItem['IdColumn'];
-            $.ajax({
-                type: "POST",
-                url: "./php/Router.php",
-                data: { 'Module': className, 'Data': uploadData },
-                success: function (result) {
-                    console.log(JSON.stringify(result));
-
-                    let images = result.Images;
-                    DisplayGallery.createContent(images, frameId);
-                },
-                dataType: 'json'
-            });
+            //DisplayGallery.loadImages(parentFrameId);
         });
     }
 
+    /**
+     * Load Images
+     * @param {String} frameId 
+     * @param {String} parentFrameId 
+     */
+    static loadImages(frameId, parentFrameId) {
+        let moduleFrameId = parentFrameId.split('_')[0];
+
+        let uploadData = {};
+        let className = 'GetImages';
+        let changeItem = JSON.parse(localStorage.getItem(`${moduleFrameId}_data_details_id`));
+
+        uploadData['newItemId'] = changeItem['Id'];
+        uploadData['newItemColumn'] = changeItem['IdColumn'];
+
+        $.ajax({
+            type: "POST",
+            url: "./php/Router.php",
+            data: { 'Module': className, 'Data': uploadData },
+            success: function (result) {
+                console.log(JSON.stringify(result));
+
+                let images = result.Images;
+                DisplayGallery.createContent(images, frameId);
+            },
+            dataType: 'json'
+        });
+    }
 }
