@@ -145,7 +145,6 @@ export default class Gallery {
                     let className = 'InsertImage';
                     let formData = new FormData();
 
-                    uploadData = JSON.parse(localStorage.getItem(`${frameId}_upload_gallary`));
                     uploadData['FileToUpload'] = [];
                     uploadData['FileToUpload'].push(`Gallery_1`);
                     uploadData['EntryId'] = detailsIdData;
