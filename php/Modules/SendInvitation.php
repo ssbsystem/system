@@ -86,7 +86,7 @@ class SendEmail
 			
 			$newPassword = TRUE;
 			$host = $_SERVER['HTTP_HOST'];
-			$invitationLink = "$host/login.php?act_code=$user_activation_code&new_pass=$newPassword";
+			$invitationLink = "https://$host/login.php?act_code=$user_activation_code&new_pass=$newPassword";
 			if ($host=="localhost") {
 				$main_data['Message'] = "Would send invitation for $userEmail link: $invitationLink";
 				$main_data['Result'] = 'S';
