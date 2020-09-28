@@ -94,7 +94,7 @@ if($no_of_row == 0)
 
 		$baseURL = "https://$host/login.php?act_code=$activationCode&new_pass=$newPassword";
 
-		$mail_body = $emailTemplates->verification($userFName, $base_url);
+		$mail_body = $emailTemplates->verification($userFName, $baseURL);
 		
 		$mail = new PHPMailer;
 		
