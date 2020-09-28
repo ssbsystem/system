@@ -19,7 +19,7 @@ class AddColumn
         $tableId = $data['TableId'];
         $size = $data['Size'];
 
-        $finalSQL = "INSERT INTO `t_7`(`Name`) VALUES ('$name');";
+        $finalSQL = "INSERT INTO `t_7`(`c_33`) VALUES ('$name');";
         $finalQueary = $this->pdo->prepare($finalSQL);
         $finalQueary->execute();
         $lastId = $this->pdo->lastInsertId();
@@ -39,7 +39,7 @@ class AddColumn
         $newColumnSQL = "ALTER TABLE $table ADD $columnName varchar($size)";
         $this->pdo->exec($newColumnSQL);
 
-        $updateSQL = "UPDATE `t_7` SET `c_5_fk`='$tableId',`ColumnName`='$columnName' WHERE `c_7_id`='$lastId';";
+        $updateSQL = "UPDATE `t_7` SET `c_5_fk`='$tableId',`c_54`='$columnName' WHERE `c_7_id`='$lastId';";
         $updateQueary = $this->pdo->prepare($updateSQL);
         $updateQueary->execute();
 

@@ -33,7 +33,7 @@ class AddTable
 
         $ctResult = "";
         foreach ($cTData as $cTRow) {
-            $ctResult .= ", c_" . $cTRow['c_5_id'] . "_fk INT(11) NULL, INDEX fk_" . $cTRow['c_5_id'] . " (c_" . $cTRow['c_5_id'] . "_fk), FOREIGN KEY (c_" . $cTRow['c_5_id'] . "_fk) REFERENCES " . $cTRow['TableName'] . "(" . $cTRow['TableIdName'] . ") ON DELETE SET NULL";//CONSTRAINT fk_" . $cTRow['c_5_id'] . " FOREIGN KEY (c_" . $cTRow['c_5_id'] . "_fk) REFERENCES " . $cTRow['TableName'] . "(" . $cTRow['TableIdName'] . ")";
+            $ctResult .= ", c_" . $cTRow['c_5_id'] . "_fk INT(11) NULL, INDEX fk_" . $cTRow['c_5_id'] . " (c_" . $cTRow['c_5_id'] . "_fk), FOREIGN KEY (c_" . $cTRow['c_5_id'] . "_fk) REFERENCES " . $cTRow['TableName'] . "(" . $cTRow['TableIdName'] . ") ON DELETE SET NULL";
         }
 
         //Upload to list
