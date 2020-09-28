@@ -95,7 +95,7 @@ class InsertImage
         }
 
         // Check file size
-        if ($_FILES[$name]["size"] > 500000) {
+        if ($_FILES[$name]["size"] > 10000000) {
             $result['Response'][] = "Sorry, your file is too large.";
             $uploadOk = 0;
         }
