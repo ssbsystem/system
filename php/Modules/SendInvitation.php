@@ -83,7 +83,7 @@ class SendEmail
 				)
 			);
 
-			$base_url = "https://ssbs.ssbsystem.com/";
+			
 			$newPassword = TRUE;
 			$host = $_SERVER['HTTP_HOST'];
 			$invitationLink = "$host/login.php?act_code=$user_activation_code&new_pass=$newPassword";

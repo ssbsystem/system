@@ -76,7 +76,7 @@ if($no_of_row == 0)
 	//$result = $statement->fetchAll();
 	
 	    
-	$base_url = "https://ssbs.ssbsystem.com/";
+	$base_url = $_SERVER['HTTP_HOST'];
 	/*$mail_body = "
 	<p>Hi $userFName,</p>
 	<p>Thanks for Registration. Your password is ".$user_password.", This password will work only after your email verification.</p>
