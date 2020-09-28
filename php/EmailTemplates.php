@@ -67,7 +67,7 @@ class EmailTemplates
                                 </tr>
                                 <tr>
                                   <td width="90"></td> 
-                                  <td align="left" style="font-family:Helvetica Neue, Helvetica, Roboto, Segoe UI, sans-serif;font-size:18px;line-height:24px;-webkit-font-smoothing:antialiased;color:rgb(173, 173, 173);"> ' . $baseUrl . '</td>
+                                  <td align="left" style="font-family:Helvetica Neue, Helvetica, Roboto, Segoe UI, sans-serif;font-size:18px;line-height:24px;-webkit-font-smoothing:antialiased;color:rgb(173, 173, 173);">' . $baseUrl . '</td>
                                   <td width="90"></td> 
                                 </tr>
                                 <tr>

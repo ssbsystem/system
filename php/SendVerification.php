@@ -92,7 +92,7 @@ if($no_of_row == 0)
 		require_once('EmailTemplates.php');
 		$emailTemplates = new EmailTemplates();
 
-		$baseURL = "https://$host/login.php?act_code=$activationCode&new_pass=$newPassword";
+		$baseURL = "https://$host/login.php?act_code=$user_activation_code&new_pass=$newPassword";
 
 		$mail_body = $emailTemplates->verification($userFName, $baseURL);
 		
