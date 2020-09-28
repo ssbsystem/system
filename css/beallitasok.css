@@ -42,3 +42,34 @@
     top: 24px;
     right: 18px;
 }
+.logout-fullscreen{
+    background-color: #fff;
+}
+.logout-button{
+    position: relative;
+    top: 50%;
+    left: 50%;
+    background: #fff;
+    width: 180px;
+    height: 42px;
+    border: 2px solid;
+    border-image-slice: 1;
+    border-width: 2px;
+    border-image-source: linear-gradient(to right, #2b416b, #1c6eb1);
+    color: #1c6eb1;
+    text-align: center;
+    padding-top: 5px;
+    font-size: 20px;
+    font-weight: 300;
+    transform: translate(-50%, -50%);
+}
+.logout-button:hover{
+    text-decoration: none;
+    color: #eee;
+    background-image: linear-gradient(to right, rgb(43, 65, 107) 0%, rgb(28, 110, 177) 100%);
+    color: white;
+    border: 2px solid !important;
+    border-image-slice: 1 !important;
+    border-width: 2px !important;
+    border-image-source: linear-gradient(to right, #2b416b, #1c6eb1) !important;
+}

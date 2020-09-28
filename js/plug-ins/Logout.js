@@ -8,15 +8,15 @@ export default class Logout {
      * @param {String} shellId 
      */
     Create(frameId, parentFrameId) {
-        /*         //partner manager frame
-                let framework = `
-                <div id="${parentFrameId}_logout" class="display-flex flex-row full-screen">
-                    <a href="../php/LogOut.php">Logout</a>
-                </div>`;
-                document.getElementById(frameId).innerHTML = framework; */
+        //partner manager frame
+        let framework = `
+        <div id="${parentFrameId}_logout" class="display-flex flex-row full-screen logout-fullscreen">
+            <a class="logout-button" href="../php/LogOut.php">Kijelentkezem</a>
+        </div>`;
+        document.getElementById(frameId).innerHTML = framework;
 
         //partner manager frame
-        let framework = `<div id=${parentFrameId}_settings class="display-flex flex-row full-screen">
+/*         let framework = `<div id=${parentFrameId}_settings class="display-flex flex-row full-screen">
                 <nav id="settingsMenu" class="col-sm-4 col-md-3 d-md-block sidebar">
                     <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                         <span>General</span>
@@ -124,7 +124,7 @@ export default class Logout {
                         </div>
                     </div>
                 </main>
-            </div>`;
+            </div>`; */
 
         document.getElementById(frameId).innerHTML = framework;
         
