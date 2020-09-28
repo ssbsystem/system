@@ -117,24 +117,19 @@ export default class DisplayGallery {
             let moduleFrameId = parentFrameId.split('_')[0];
 
             let uploadData = {};
-            let className = 'ModuleData';
+            let className = 'GetImages';
             let changeItem = JSON.parse(localStorage.getItem(`${moduleFrameId}_data_details_id`));
             uploadData['newItemId'] = changeItem['Id'];
             uploadData['newItemColumn'] = changeItem['IdColumn'];
-            uploadData['isDownload'] = true;
-            uploadData['RequestType'] = 'PP';
-            uploadData['FPluginPluginId'] = plugin['FPluginPluginId'];
-
             $.ajax({
                 type: "POST",
                 url: "./php/Router.php",
                 data: { 'Module': className, 'Data': uploadData },
                 success: function (result) {
-                    let newPlugin = result[0].Data['1'].Display;
-                    //console.log(result);
                     console.log(JSON.stringify(result));
-                    document.getElementById(frameId).innerHTML = '';
-                    DisplayGallery.createContent(newPlugin, frameId);
+
+                    let images = result.Images;
+                    DisplayGallery.createContent(images, frameId);
                 },
                 dataType: 'json'
             });
