@@ -19,13 +19,14 @@ class AddTable
         $connTableIds = $data['ConnTableIds'];
 
         $cTSql = "SELECT 
-                    c_5_fk,
+                    c_5_id,
                     c_31 AS TName,
                     c_51 AS TableName,
-                    c_52 AS TableIdName,
+                    c_52 AS TableIdName
                   FROM t_5 
                   WHERE c_5_id 
                   IN (" . implode(',', $connTableIds) . ")";
+        echo $cTSql;
         $cTQueary = $this->pdo->prepare($cTSql);
         $cTQueary->execute();
         $cTData = $cTQueary->fetchAll(PDO::FETCH_ASSOC);
