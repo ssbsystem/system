@@ -201,6 +201,13 @@ export default class DinamicFormPopup {
         }
 
         //Add click
+        document.getElementById(frameId + '_delete').addEventListener(
+            'click',
+            function () {
+                DinamicFormPopup.delete(frameId);
+            }
+        );
+
         document.getElementById(frameId + '_cancel').addEventListener(
             'click',
             function () {
@@ -229,6 +236,9 @@ export default class DinamicFormPopup {
 
         document.onkeydown = function (e) {
             switch (e.key) {
+                case 'Delete':
+                    DinamicFormPopup.delete(frameId);
+                    break;
                 case 'Escape':
                     DinamicFormPopup.cancel(frameId);
                     break;
@@ -320,6 +330,15 @@ export default class DinamicFormPopup {
             default:
                 break;
         }
+    }
+    
+    /**
+     * Delete
+     * @param {String} frameId 
+     */
+    static delete(frameId) {
+        $(`#${frameId}_frame`).remove();
+        document.onkeydown = null;
     }
 
     /**
@@ -450,6 +469,7 @@ export default class DinamicFormPopup {
                         </div>
                         <div class="dnmcppp-footer">
                             <div class="display-flex justify-content-center">
+                                <div id="${frameId}_delete" class="delete-btn-1 btn btn-sm">Törlés</div>    
                                 <div id="${frameId}_cancel" class="cancel-btn-1 btn btn-sm">
                                     ${NameAndText.getText('cancel')}
                                 </div>    

@@ -283,6 +283,24 @@ iframe[seamless] {
     font-style: italic;
 }
 
+.delete-btn-1 {
+    height: 100%;
+    width: 80px;
+    cursor: pointer;
+    margin: 0 10px;
+    border: 1px solid #d10000;
+    background: #fff;
+    color: #d10000;
+    border-radius: 3px;
+    text-transform: capitalize;
+}
+
+.delete-btn-1:hover {
+    background: #d10000;
+    color: #fff;
+    font-style: italic;
+}
+
 #page_header {
     display: none;
     background: #3B4372;
@@ -299,13 +317,15 @@ iframe[seamless] {
     z-index: 900;
     background: #fff;
     border-right: 1px solid #cfd3e6;
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
 }
 
 #main_menu::-webkit-scrollbar {
     display: none;
-  }
+}
 
 #content_frame {
     overflow: hidden;

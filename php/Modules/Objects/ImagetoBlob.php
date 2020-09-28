@@ -40,7 +40,6 @@ class ImagetoBlob
         $pData['imgBlob'] = $base64;
         $pData['imgAlt'] = $imgFileName;
 
-
         array_push($imagesBlobs, $pData);
         return $imagesBlobs;
 

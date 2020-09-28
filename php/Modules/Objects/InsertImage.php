@@ -16,54 +16,64 @@ class InsertImage
         $main_data = array();
 
         $data = json_decode($data, true);
-        $filesData = $data['FileToUpload'];
-        foreach ($filesData as $itemName) {
-            $this->uploadImage($itemName);
+        $entryId = $data['EntryId'];
+        $cardId = $entryId['Id'];
+        $cardColumn = $entryId['IdColumn'];
+        list($table, $column) = explode(".", $cardColumn);
+
+        $query = "SELECT 
+                    c_112_id,
+                    c_80 AS isGallery,
+                    c_81 AS galleryURL,
+                    c_108_fk
+                FROM t_112 LEFT JOIN $table ON $table.c_112_FK=t_112.c_112_id
+                WHERE $table.$column = :id";
+
+        $statement = $this->pdo->prepare($query);
+        $statement->execute(
+            array(
+                ':id' => $cardId
+            )
+        );
+
+        $galleryArray = $statement->fetchAll();
+
+        $entryDir = "$cardColumn.$cardId";
+        $entryDir = str_replace(".", '-', $entryDir);
+        $path = "uploads/img/$entryDir/";
+
+        if (sizeof($galleryArray) === 0) {
+            mkdir("uploads/img/$entryDir");
+
+            $sql = "INSERT INTO t_112 (c_80, c_81, c_108_fk) VALUES (?,?,?)";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([true, $path, null]);
+            $lastId = $this->pdo->lastInsertId();
+
+            $params = [
+                'c_112_fk' => $lastId,
+                'cardId' => $cardId
+            ];
+            $sql = "UPDATE $table SET c_112_fk=:c_112_fk WHERE $column=:cardId";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute($params);
         }
 
-        //$main_data = $data;
-        /*
-        $name = $data['Name'];
-        $tableId = $data['TableId'];
-        $size = $data['Size'];
+        $filesData = $data['FileToUpload'];
 
-        $finalSQL = "INSERT INTO `t_7`(`Name`) VALUES ('$name');";
-        $finalQueary = $this->pdo->prepare($finalSQL);
-        $finalQueary->execute();
-        $lastId = $this->pdo->lastInsertId();
-
-        $columnName = "c_$lastId";
-
-        $tableQueary = $this->pdo->query(
-            "SELECT 
-                c_5_fk,
-                c_31 AS TName,
-                c_51 AS TableName,
-                c_52 AS TableIdName,
-             FROM t_5 
-             WHERE c_5_id=$tableId"
-        );
-        $table = $tableQueary->fetch()['TableName'];
-        $newColumnSQL = "ALTER TABLE $table ADD $columnName varchar($size)";
-        $this->pdo->exec($newColumnSQL);
-
-        $updateSQL = "UPDATE `t_7` SET `c_5_fk`='$tableId',`ColumnName`='$columnName' WHERE `c_7_id`='$lastId';";
-        $updateQueary = $this->pdo->prepare($updateSQL);
-        $updateQueary->execute();
-
-        if ($updateQueary) {
-            $main_data['Result'] = 'S';
-        } else {
-            $main_data['Result'] = 'F';
-        }*/
+        for ($i = 0; $i < sizeof($filesData); $i++) {
+            $itemName = $filesData[$i];
+            $main_data[$i] = $this->uploadImage($itemName, $path);
+        }
 
         return $main_data;
     }
 
-    function uploadImage($name)
+    function uploadImage($name, $target_dir)
     {
-        $target_dir = "uploads/img/";
-        $target_file = $target_dir . basename($_FILES[$name]["name"]);
+        $result = [];
+        $basename = strtolower($_FILES[$name]["name"]);
+        $target_file = $target_dir . basename($basename);
 
         $uploadOk = 1;
         $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
@@ -71,22 +81,22 @@ class InsertImage
         // Check if image file is a actual image or fake image
         $check = getimagesize($_FILES[$name]["tmp_name"]);
         if ($check !== false) {
-            echo "File is an image - " . $check["mime"] . ".";
+            $result['Response'][] = "File is an image - " . $check["mime"] . ".";
             $uploadOk = 1;
         } else {
-            echo "File is not an image.";
+            $result['Response'][] = "File is not an image.";
             $uploadOk = 0;
         }
 
         // Check if file already exists
         if (file_exists($target_file)) {
-            echo "Sorry, file already exists.";
+            $result['Response'][] = "Sorry, file already exists.";
             $uploadOk = 0;
         }
 
         // Check file size
         if ($_FILES[$name]["size"] > 500000) {
-            echo "Sorry, your file is too large.";
+            $result['Response'][] = "Sorry, your file is too large.";
             $uploadOk = 0;
         }
 
@@ -95,20 +105,25 @@ class InsertImage
             $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
             && $imageFileType != "gif"
         ) {
-            echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+            $result['Response'][] = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
             $uploadOk = 0;
         }
 
         // Check if $uploadOk is set to 0 by an error
         if ($uploadOk == 0) {
-            echo "Sorry, your file was not uploaded.";
+            $result['State'] = 'F';
+            $result['Response'][] = "Sorry, your file was not uploaded.";
             // if everything is ok, try to upload file
         } else {
             if (move_uploaded_file($_FILES[$name]["tmp_name"], $target_file)) {
-                echo "The file " . basename($_FILES[$name]["name"]) . " has been uploaded.";
+                $result['State'] = 'S';
+                $result['Response'][] = "The file " . basename($_FILES[$name]["name"]) . " has been uploaded.";
             } else {
-                echo "Sorry, there was an error uploading your file.";
+                $result['State'] = 'F';
+                $result['Response'][] = "Sorry, there was an error uploading your file.";
             }
         }
+
+        return $result;
     }
 }

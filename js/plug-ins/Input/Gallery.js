@@ -110,22 +110,6 @@ export default class Gallery {
             AutoScroll.Integration(`${frameId}_cont`);
         });
 
-        $(`#${parentFrameId}`).bind(`${parentFrameId}_save`, function (e) {
-            let lastObj = JSON.parse(localStorage.getItem(`${parentFrameId}_save`));
-            let lastId = lastObj['LastId'];
-            let lastIdColumn = lastObj['LastIdColumn'];
-
-            let columnLength = lastIdColumn.length;
-            let fkColumn = lastIdColumn.substr(0, columnLength - 2);
-            fkColumn += 'FK';
-
-            Gallery.uploadGallery(frameId, parentFrameId);
-        });
-
-        $(`#ntsk_steps_trash_btn_2`).bind(`click`, function (e) {
-            Gallery.uploadGallery(frameId, parentFrameId);
-        });
-
         $(`#${frameId}_add`).bind(`click`, function () {
             $(`#${frameId}_add_input`).click();
         });
@@ -154,45 +138,34 @@ export default class Gallery {
                             <a href="${url}" target="_blank"><img class="gallery-item" src="${url}"></a><div>`
                     );
 
-
-                    //upload img DB
-
-
-
-                    let detailsIdData = JSON.parse(localStorage.getItem(`${parentFrameId}_data_details_id`));
-
-
+                    let moduleFrameId = parentFrameId.split('_')[0];
+                    let detailsIdData = JSON.parse(localStorage.getItem(`${moduleFrameId}_data_details_id`));
 
                     let uploadData = {};
-                    let className = 'UploadImages';
+                    let className = 'InsertImage';
+                    let formData = new FormData();
 
                     uploadData = JSON.parse(localStorage.getItem(`${frameId}_upload_gallary`));
-
-                    let formData = new FormData();
-                    formData.append('Module', className);
                     uploadData['FileToUpload'] = [];
+                    uploadData['FileToUpload'].push(`Gallery_1`);
+                    uploadData['EntryId'] = detailsIdData;
 
-                    for (let i = 0; i < uploadData.Add.length; i++) {
-                        const fileItem = uploadData.Add[i];
+                    /** Image converter */
+                    let fileName = file.name;
+                    let imageURL = reader.result;
+                    // Split the base64 string in data and contentType
+                    let block = imageURL.split(";");
+                    // Get the content type
+                    let contentType = block[0].split(":")[1];
+                    // get the real base64 content of the file
+                    let realData = block[1].split(",")[1];
+                    // Convert to blob
+                    let blob = Gallery.b64toBlob(realData, contentType);
 
-                        let fileName = fileItem.FileName;
-                        let imageURL = fileItem.Source;
-                        // Split the base64 string in data and contentType
-                        let block = imageURL.split(";");
-                        // Get the content type
-                        let contentType = block[0].split(":")[1];// In this case "image/gif"
-                        // get the real base64 content of the file
-                        let realData = block[1].split(",")[1];// In this case "iVBORw0KGg...."
-
-                        // Convert to blob
-                        let blob = Gallery.b64toBlob(realData, contentType);
-
-                        formData.append(`Gallery_${i}`, blob, fileName);
-                        uploadData['FileToUpload'].push(`Gallery_${i}`)
-                    }
-
+                    formData.append('Module', className);
+                    formData.append(`Gallery_1`, blob, fileName);
+                    console.log(uploadData);
                     formData.append('Data', JSON.stringify(uploadData));
-
 
                     $.ajax({
                         type: "POST",
@@ -225,11 +198,6 @@ export default class Gallery {
                         },
                         dataType: 'json'
                     });
-
-                    /*
-                    if (fLength - 1 === i) {
-                        localStorage.setItem(`${frameId}_upload_gallary`, JSON.stringify(changeData));
-                    }*/
                 }
 
                 if (file) {
@@ -262,81 +230,6 @@ export default class Gallery {
                         accept="image/x-png,image/gif,image/jpeg"/>
                 </div>
             </div>`
-    }
-
-    /** Database **/
-    /**
-     * Upload Gallery
-     * @param {String} parentFrameId 
-     */
-    static uploadGallery(frameId, parentFrameId) {
-
-        if (true) {
-            let uploadData = {};
-            let className = 'InsertImage';
-
-            uploadData = JSON.parse(localStorage.getItem(`${frameId}_upload_gallary`));
-
-            let formData = new FormData();
-            formData.append('Module', className);
-            uploadData['FileToUpload'] = [];
-
-            for (let i = 0; i < uploadData.Add.length; i++) {
-                const fileItem = uploadData.Add[i];
-
-                let fileName = fileItem.FileName;
-                let imageURL = fileItem.Source;
-                // Split the base64 string in data and contentType
-                let block = imageURL.split(";");
-                // Get the content type
-                let contentType = block[0].split(":")[1];// In this case "image/gif"
-                // get the real base64 content of the file
-                let realData = block[1].split(",")[1];// In this case "iVBORw0KGg...."
-
-                // Convert to blob
-                let blob = Gallery.b64toBlob(realData, contentType);
-
-                formData.append(`Gallery_${i}`, blob, fileName);
-                uploadData['FileToUpload'].push(`Gallery_${i}`)
-            }
-
-            formData.append('Data', JSON.stringify(uploadData));
-
-
-            $.ajax({
-                type: "POST",
-                url: "./php/Router.php",
-                data: formData,
-                contentType: false,
-                processData: false,
-                cache: false,
-                success: function (result) {
-                    let tableResultData = {};
-                    console.log(result);
-
-                    for (const table in result[0]) {
-                        if (result[0].hasOwnProperty(table)) {
-                            tableResultData = result[0][table];
-                        }
-                    }
-
-                    //if (tableResultData['Result'] === 'S') {
-                    if (true) {
-                        $(`#${parentFrameId}`).trigger(`${parentFrameId}_save_end`);
-                    } else {
-                        Swal.fire({
-                            type: 'error',
-                            title: 'Sikertelen',
-                            text: 'A galéria feltöltése sikertelen volt!',
-                            heightAuto: false
-                        });
-                    }
-                },
-                dataType: 'json'
-            });
-        } else {
-            $(`#${parentFrameId}`).trigger(`${parentFrameId}_save_end`);
-        }
     }
 
     /**
