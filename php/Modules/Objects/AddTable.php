@@ -26,7 +26,6 @@ class AddTable
                   FROM t_5 
                   WHERE c_5_id 
                   IN (" . implode(',', $connTableIds) . ")";
-        echo $cTSql;
         $cTQueary = $this->pdo->prepare($cTSql);
         $cTQueary->execute();
         $cTData = $cTQueary->fetchAll(PDO::FETCH_ASSOC);
