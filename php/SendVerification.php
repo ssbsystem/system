@@ -15,9 +15,9 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-// require_once('../PHPMailer/PHPMailer.php');
-// require_once('../PHPMailer/SMTP.php');
-// require_once('../PHPMailer/Exception.php');
+require_once('../PHPMailer/PHPMailer.php');
+require_once('../PHPMailer/SMTP.php');
+require_once('../PHPMailer/Exception.php');
 
 require_once('./Modules/Connect.php');
 
@@ -75,8 +75,7 @@ if($no_of_row == 0)
 	
 	//$result = $statement->fetchAll();
 	
-	    
-	$base_url = $_SERVER['HTTP_HOST'];
+
 	/*$mail_body = "
 	<p>Hi $userFName,</p>
 	<p>Thanks for Registration. Your password is ".$user_password.", This password will work only after your email verification.</p>
@@ -92,7 +91,10 @@ if($no_of_row == 0)
 	}else {
 		require_once('EmailTemplates.php');
 		$emailTemplates = new EmailTemplates();
-		$mail_body = $emailTemplates->verification($userFName, $base_url, $user_activation_code, $newPassword);
+
+		$baseURL = "https://$host/login.php?act_code=$activationCode&new_pass=$newPassword";
+
+		$mail_body = $emailTemplates->verification($userFName, $base_url);
 		
 		$mail = new PHPMailer;
 		
