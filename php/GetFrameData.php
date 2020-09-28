@@ -1,4 +1,11 @@
 <?php
+session_start();
+if (!isset($_SESSION['UserId'])) {
+    die('No session!');
+}
+
+$userId = $_SESSION['UserId'];
+
 require_once('Modules/Connect.php');
 $PDOConnect = new PDOConnect();
 $pdo = $PDOConnect->pdo;
@@ -19,7 +26,8 @@ $userModules = $pdo->query(
      ON c_6_id = c_6_fk
      INNER JOIN t_3 
      ON c_3_id = c_3_fk
-     ORDER BY t_110.c_72"
+     ORDER BY t_110.c_72
+     WHERE c_200_fk=$userId"
 )->fetchAll(PDO::FETCH_ASSOC);
 
 foreach ($userModules as $key => $entry) {
