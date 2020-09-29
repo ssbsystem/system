@@ -24,6 +24,8 @@ class GetImages
 
         $cardId = $uplodedData['newItemId'];
         $cardColumn = $uplodedData['newItemColumn'];
+        $offset = 0;//$uplodedData['Offet'];
+        $limit = 10;
         list($table, $column) = explode(".", $cardColumn);
 
         $query = "SELECT 
@@ -51,9 +53,40 @@ class GetImages
         $galleryData = $galleryArray[0];
         $databaseURL = $galleryData['galleryURL'];
 
-        $imagetoBlob = new ImagetoBlob();
-        $main_data['Images'] = $imagetoBlob->Create($databaseURL);
+        $main_data['Images'] = $this->CreateImage($databaseURL);
 
         return $main_data;
+    }
+
+    public function CreateImage($imgUrl)
+    {
+        $idNo = 0;
+
+        $pos = strpos($imgUrl, '.');
+        if ($pos === false) {
+            //URL is a directory
+            $imagesBlobs = array();
+            $imageArray = glob($imgUrl . "*.*");
+
+            foreach ($imageArray as $imgUrl) {
+                $item = array();
+                $imgParts = pathinfo($imgUrl);
+                $item['URL'] = $imgUrl;
+                $item['IdNo'] = $idNo;
+                $item['Basename'] = $imgParts['basename'];
+
+                array_push($imagesBlobs, $item);
+                $idNo++;
+            }
+
+            return $imagesBlobs;
+        } else {
+            $item = array();
+            $imgParts = pathinfo($imgUrl);
+            $item['URL'] = $imgUrl;
+            $item['IdNo'] = $idNo;
+            $item['Basename'] = $imgParts['basename'];
+            return $item;
+        }
     }
 }

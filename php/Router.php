@@ -124,7 +124,16 @@ switch ($module) {
 
         print_r(json_encode($main_data));
         break;
+    case 'GetOneImage':
+        //Includes
+        require_once('Modules/Objects/GetOneImage.php');
 
+        //Call upload function
+        $getImages = new GetOneImage();
+        $main_data =  $getImages->Create($data['ImageURL']);
+
+        print_r(json_encode($main_data));
+        break;
     default:
         # code...
         break;

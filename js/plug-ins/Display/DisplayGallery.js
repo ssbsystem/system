@@ -60,24 +60,59 @@ export default class DisplayGallery {
             return;
         }
 
-        for (const image of images) {
+        for (const imageData of images) {
             //step number & name
             frameElement.insertAdjacentHTML(
                 'beforeend',
-                DisplayGallery.getImage(frameId, image)
+                DisplayGallery.getImage(frameId, imageData)
             )
+
+            let uploadData = {};
+            let className = 'GetOneImage';
+
+            uploadData['ImageURL'] = imageData.URL;
+
+            $.ajax({
+                type: "POST",
+                url: "./php/Router.php",
+                data: { 'Module': className, 'Data': uploadData },
+                success: function (result) {
+                    let blobString = result.BlobString;
+                    let blobFile = DataURLToBlob.Create(blobString);
+                    let url = window.URL.createObjectURL(blobFile);
+
+                    let imgId = imageData.IdNo;
+
+                    document.getElementById(`${frameId}_${imgId}`).style=`background: url(${url}) no-repeat center center;`;
+                },
+                dataType: 'json'
+            });
         }
+
+        frameElement.insertAdjacentHTML(
+            'beforeend',
+            `<button id="${frameId}_more_img">More</button>`
+        )
+
+        document.getElementById(`${frameId}_more_img`).addEventListener(
+            'click',
+            function () {
+                
+            }
+        )
     }
 
     static getImage(frameId, imageData) {
-        let imgId = imageData.imgId;
-        let imgAlt = imageData.imgAlt;
+        let imgId = imageData.IdNo;
+        let imgAlt = imageData.Basename;
+        /*
         let blobString = imageData.imgBlob;
         let blobFile = DataURLToBlob.Create(blobString);
-        let url = window.URL.createObjectURL(blobFile);
+        let url = window.URL.createObjectURL(blobFile);*/
+        //style="background: url(${url}) no-repeat center center;"
 
         return `
-            <div id=${frameId}_${imgId} class="gallery-image-content display-flex flex-column justify-content-center" style="background: url(${url}) no-repeat center center;" alt="${imgAlt}">
+            <div id=${frameId}_${imgId} class="gallery-image-content display-flex flex-column justify-content-center" alt="${imgAlt}">
                 <p class="position-absolute">${imgAlt}</p>
             </div>
             `;
@@ -105,8 +140,6 @@ export default class DisplayGallery {
             changeData.PluginNumber = plugin.Number;
             localStorage.setItem(`${parentFrameId}_child_loaded`, JSON.stringify(changeData));
             $(`#${parentFrameId}`).trigger(`${parentFrameId}_child_loaded`);
-
-            //DisplayGallery.loadImages(parentFrameId);
         });
     }
 
