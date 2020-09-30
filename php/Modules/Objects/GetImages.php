@@ -24,8 +24,7 @@ class GetImages
 
         $cardId = $uplodedData['newItemId'];
         $cardColumn = $uplodedData['newItemColumn'];
-        $offset = 0;//$uplodedData['Offet'];
-        $limit = 10;
+        $offset = $uplodedData['Offset'];
         list($table, $column) = explode(".", $cardColumn);
 
         $query = "SELECT 
@@ -53,14 +52,15 @@ class GetImages
         $galleryData = $galleryArray[0];
         $databaseURL = $galleryData['galleryURL'];
 
-        $main_data['Images'] = $this->CreateImage($databaseURL);
+        $main_data = $this->CreateImage($databaseURL, $offset);
 
         return $main_data;
     }
 
-    public function CreateImage($imgUrl)
+    public function CreateImage($imgUrl, $offset)
     {
         $idNo = 0;
+        $state = 'more';
 
         $pos = strpos($imgUrl, '.');
         if ($pos === false) {
@@ -68,19 +68,36 @@ class GetImages
             $imagesBlobs = array();
             $imageArray = glob($imgUrl . "*.*");
 
-            foreach ($imageArray as $imgUrl) {
+            $length = $offset + 10;
+            $array_legth = count($imageArray);
+
+            if ($length > $array_legth) {
+                $length = $array_legth;
+                $state = 'end';
+            } else if ($length == $array_legth) {
+                $state = 'end';
+            }
+
+            for ($i = $offset; $i < $length; $i++) {
+                $imgUrl = $imageArray[$i];
+
                 $item = array();
                 $imgParts = pathinfo($imgUrl);
                 $item['URL'] = $imgUrl;
-                $item['IdNo'] = $idNo;
+                $item['IdNo'] = $i;
                 $item['Basename'] = $imgParts['basename'];
 
                 array_push($imagesBlobs, $item);
-                $idNo++;
             }
 
-            return $imagesBlobs;
+            $result = array();
+            $result['Images'] = $imagesBlobs;
+            $result['State'] = $state;
+
+            return $result;
         } else {
+            //URL is a file
+
             $item = array();
             $imgParts = pathinfo($imgUrl);
             $item['URL'] = $imgUrl;

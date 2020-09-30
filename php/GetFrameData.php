@@ -14,7 +14,7 @@ $userModules = $pdo->query(
     "SELECT 
         c_110_id, 
         c_200_fk, 
-        c_6_fk, 
+        c_6_fk AS TabId, 
         c_25 AS TabName, 
         c_53 AS TabIcon, 
         c_3_fk, 
@@ -31,10 +31,11 @@ $userModules = $pdo->query(
 )->fetchAll(PDO::FETCH_ASSOC);
 
 foreach ($userModules as $key => $entry) {
-    $nUserModules[$entry['c_6_fk']]['TabName'] = $entry['TabName'];
-    $nUserModules[$entry['c_6_fk']]['TabIcon'] = $entry['TabIcon'];
-    $nUserModules[$entry['c_6_fk']]['Modules'][$entry['c_3_fk']]['FUserModuleId'] = $entry['c_110_id'];
-    $nUserModules[$entry['c_6_fk']]['Modules'][$entry['c_3_fk']]['Name'] = $entry['ModuleName'];
+    $nUserModules[$entry['Number']]['TabId'] = $entry['TabId'];
+    $nUserModules[$entry['Number']]['TabName'] = $entry['TabName'];
+    $nUserModules[$entry['Number']]['TabIcon'] = $entry['TabIcon'];
+    $nUserModules[$entry['Number']]['Modules'][$entry['c_3_fk']]['FUserModuleId'] = $entry['c_110_id'];
+    $nUserModules[$entry['Number']]['Modules'][$entry['c_3_fk']]['Name'] = $entry['ModuleName'];
 }
 
 print_r(json_encode($nUserModules));

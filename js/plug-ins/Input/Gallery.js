@@ -42,14 +42,29 @@ export default class Gallery {
         localStorage.setItem(`${parentFrameId}_child_loaded`, JSON.stringify(changeData));
         $(`#${parentFrameId}`).trigger(`${parentFrameId}_child_loaded`);
 
+        let offset = 0;
+        Gallery.loadImages(frameId, parentFrameId, offset)
+
+        AutoScroll.Integration(`${frameId}_cont`);
+    }
+
+    /**
+     * Load Images
+     * @param {String} frameId 
+     * @param {String} parentFrameId 
+     * @param {String} offset 
+     */
+    static loadImages(frameId, parentFrameId, offset) {
         let moduleFrameId = parentFrameId.split('_')[0];
 
         let uploadData = {};
         let className = 'GetImages';
-
         let changeItem = JSON.parse(localStorage.getItem(`${moduleFrameId}_data_details_id`));
+
         uploadData['newItemId'] = changeItem['Id'];
         uploadData['newItemColumn'] = changeItem['IdColumn'];
+        uploadData['Offset'] = offset;
+
         $.ajax({
             type: "POST",
             url: "./php/Router.php",
@@ -57,25 +72,69 @@ export default class Gallery {
             success: function (result) {
                 console.log(JSON.stringify(result));
 
-                let images = result.Images;
-                Gallery.createContent(images, frameId);
+                Gallery.createContent(result, frameId, parentFrameId, offset);
             },
             dataType: 'json'
         });
-
-        AutoScroll.Integration(`${frameId}_cont`);
     }
 
     /**
      * Create Content
      * @param {JSON} images 
      * @param {String} frameId 
+     * @param {String} parentFrameId 
+     * @param {Number} offset 
      */
-    static createContent(images, frameId) {
-        for (const image of images) {
+    static createContent(data, frameId, parentFrameId, offset) {
+        let images = data.Images;
+        let state = data.State;
+
+        if (images === undefined || images === null) {
+            return;
+        }
+
+        for (const imageData of images) {
             document.getElementById(`${frameId}_cont`).insertAdjacentHTML(
                 'beforeend',
-                Gallery.getImage(frameId, image)
+                Gallery.getImage(frameId, imageData)
+            );
+
+            let uploadData = {};
+            let className = 'GetOneImage';
+
+            uploadData['ImageURL'] = imageData.URL;
+
+            $.ajax({
+                type: "POST",
+                url: "./php/Router.php",
+                data: { 'Module': className, 'Data': uploadData },
+                success: function (result) {
+                    let blobString = result.BlobString;
+                    let blobFile = DataURLToBlob.Create(blobString);
+                    let url = window.URL.createObjectURL(blobFile);
+
+                    let imgId = imageData.IdNo;
+
+                    document.getElementById(`${frameId}_${imgId}`).style = `background: url(${url}) no-repeat center center;`;
+                },
+                dataType: 'json'
+            });
+        }
+
+        offset += 10;
+
+        if (state === 'more') {
+            document.getElementById(`${frameId}_cont`).insertAdjacentHTML(
+                'beforeend',
+                `<button id="${frameId}_more_img">More</button>`
+            );
+
+            document.getElementById(`${frameId}_more_img`).addEventListener(
+                'click',
+                function () {
+                    Gallery.loadImages(frameId, parentFrameId, offset);
+                    this.remove();
+                }
             )
         }
     }
@@ -86,14 +145,11 @@ export default class Gallery {
      * @param {JSON} imageData 
      */
     static getImage(frameId, imageData) {
-        let blobString = imageData.imgBlob;
-        let blobFile = DataURLToBlob.Create(blobString);
-        let url = window.URL.createObjectURL(blobFile);
-        let imgId = imageData.imgId;
-        let imgAlt = imageData.imgAlt;
+        let imgId = imageData.IdNo;
+        let imgAlt = imageData.Basename;
 
         return `
-            <div id=${frameId}_${imgId} class="gallery-image-content sm display-flex flex-column justify-content-center" style="background: url(${url}) no-repeat center center;" alt="${imgAlt}">
+            <div id=${frameId}_${imgId} class="gallery-image-content display-flex flex-column justify-content-center" alt="${imgAlt}">
                 <p class="position-absolute">${imgAlt}</p>
             </div>
             `;

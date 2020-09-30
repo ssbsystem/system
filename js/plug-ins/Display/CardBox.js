@@ -4,7 +4,6 @@ import FormInputs from "../../designs/FormInputs.js";
 import CardNumber from "../objects/CardNumber.js";
 import DinamicFormPopup from "../DinamicFormPopup.js";
 import FillCard from "../objects/FillCard.js";
-import { addListener } from "../../common.js";
 
 export default class CardBox {
     /**
@@ -294,9 +293,12 @@ export default class CardBox {
         let cards = document.querySelectorAll(`[data-place="${frameId}"]`);
 
         //First card design
-        let firstCard = cards[0],
-            firstCardFullId = firstCard.id;
-        $(`#${firstCardFullId}`).addClass("selected-taskcard");
+        let firstCard = cards[0];
+
+        if (firstCard !== undefined && firstCard !== null) {
+            let firstCardFullId = firstCard.id;
+            $(`#${firstCardFullId}`).addClass("selected-taskcard");
+        }
 
         /* Events */
         //New entry
