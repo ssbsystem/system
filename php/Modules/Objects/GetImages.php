@@ -24,6 +24,7 @@ class GetImages
 
         $cardId = $uplodedData['newItemId'];
         $cardColumn = $uplodedData['newItemColumn'];
+        $offset = $uplodedData['Offset'];
         list($table, $column) = explode(".", $cardColumn);
 
         $query = "SELECT 
@@ -51,9 +52,58 @@ class GetImages
         $galleryData = $galleryArray[0];
         $databaseURL = $galleryData['galleryURL'];
 
-        $imagetoBlob = new ImagetoBlob();
-        $main_data['Images'] = $imagetoBlob->Create($databaseURL);
+        $main_data = $this->CreateImage($databaseURL, $offset);
 
         return $main_data;
+    }
+
+    public function CreateImage($imgUrl, $offset)
+    {
+        $idNo = 0;
+        $state = 'more';
+
+        $pos = strpos($imgUrl, '.');
+        if ($pos === false) {
+            //URL is a directory
+            $imagesBlobs = array();
+            $imageArray = glob($imgUrl . "*.*");
+
+            $length = $offset + 10;
+            $array_legth = count($imageArray);
+
+            if ($length > $array_legth) {
+                $length = $array_legth;
+                $state = 'end';
+            } else if ($length == $array_legth) {
+                $state = 'end';
+            }
+
+            for ($i = $offset; $i < $length; $i++) {
+                $imgUrl = $imageArray[$i];
+
+                $item = array();
+                $imgParts = pathinfo($imgUrl);
+                $item['URL'] = $imgUrl;
+                $item['IdNo'] = $i;
+                $item['Basename'] = $imgParts['basename'];
+
+                array_push($imagesBlobs, $item);
+            }
+
+            $result = array();
+            $result['Images'] = $imagesBlobs;
+            $result['State'] = $state;
+
+            return $result;
+        } else {
+            //URL is a file
+
+            $item = array();
+            $imgParts = pathinfo($imgUrl);
+            $item['URL'] = $imgUrl;
+            $item['IdNo'] = $idNo;
+            $item['Basename'] = $imgParts['basename'];
+            return $item;
+        }
     }
 }

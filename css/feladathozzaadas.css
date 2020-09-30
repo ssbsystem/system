@@ -115,7 +115,6 @@
     float: left;
     overflow: hidden;
     padding: 0 4%;
-    border-bottom: 1px solid #ddd;
 }
 
 .taskstep-formcontrol {
@@ -382,10 +381,10 @@ input:checked[type="checkbox"]:before {
 }
 
 .upload-img-shell {
-    width: 100px;
+    width: 100%;
     height: 100px;
     float: left;
-    margin: 0px 20px 20px 0px
+    margin: 0px 0 20px 0px;
 }
 
 .gallery-item-shell {
@@ -545,7 +544,4 @@ input:checked[type="checkbox"]:before {
 }
 
 @media (max-width: 1199px) {
-    .new-obj-shell {
-        border-bottom: none;
-    }
 }

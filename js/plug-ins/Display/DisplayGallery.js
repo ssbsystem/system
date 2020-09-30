@@ -45,39 +45,79 @@ export default class DisplayGallery {
             }
         )
 
-        DisplayGallery.loadImages(frameId, parentFrameId);
+        let offset = 0;
+        DisplayGallery.loadImages(frameId, parentFrameId, offset);
     }
 
     /**
      * Create Content
-     * @param {JSON} images 
+     * @param {JSON} data 
      * @param {String} frameId 
+     * @param {String} parentFrameId 
+     * @param {String} offset 
      */
-    static createContent(images, frameId) {
+    static createContent(data, frameId, parentFrameId, offset) {
         let frameElement = document.getElementById(frameId);
-        // frameElement.classList.add('task-timeline');
+        let images = data.Images;
+        let state = data.State;
+
         if (images === undefined || images === null) {
             return;
         }
 
-        for (const image of images) {
+        for (const imageData of images) {
             //step number & name
             frameElement.insertAdjacentHTML(
                 'beforeend',
-                DisplayGallery.getImage(frameId, image)
+                DisplayGallery.getImage(frameId, imageData)
+            )
+
+            let uploadData = {};
+            let className = 'GetOneImage';
+
+            uploadData['ImageURL'] = imageData.URL;
+
+            $.ajax({
+                type: "POST",
+                url: "./php/Router.php",
+                data: { 'Module': className, 'Data': uploadData },
+                success: function (result) {
+                    let blobString = result.BlobString;
+                    let blobFile = DataURLToBlob.Create(blobString);
+                    let url = window.URL.createObjectURL(blobFile);
+
+                    let imgId = imageData.IdNo;
+
+                    document.getElementById(`${frameId}_${imgId}`).style = `background: url(${url}) no-repeat center center;`;
+                },
+                dataType: 'json'
+            });
+        }
+
+        offset += 10;
+
+        if (state === 'more') {
+            frameElement.insertAdjacentHTML(
+                'beforeend',
+                `<button id="${frameId}_more_img">More</button>`
+            );
+
+            document.getElementById(`${frameId}_more_img`).addEventListener(
+                'click',
+                function () {
+                    DisplayGallery.loadImages(frameId, parentFrameId, offset);
+                    this.remove();
+                }
             )
         }
     }
 
     static getImage(frameId, imageData) {
-        let imgId = imageData.imgId;
-        let imgAlt = imageData.imgAlt;
-        let blobString = imageData.imgBlob;
-        let blobFile = DataURLToBlob.Create(blobString);
-        let url = window.URL.createObjectURL(blobFile);
+        let imgId = imageData.IdNo;
+        let imgAlt = imageData.Basename;
 
         return `
-            <div id=${frameId}_${imgId} class="gallery-image-content display-flex flex-column justify-content-center" style="background: url(${url}) no-repeat center center;" alt="${imgAlt}">
+            <div id=${frameId}_${imgId} class="gallery-image-content display-flex flex-column justify-content-center" alt="${imgAlt}">
                 <p class="position-absolute">${imgAlt}</p>
             </div>
             `;
@@ -105,8 +145,6 @@ export default class DisplayGallery {
             changeData.PluginNumber = plugin.Number;
             localStorage.setItem(`${parentFrameId}_child_loaded`, JSON.stringify(changeData));
             $(`#${parentFrameId}`).trigger(`${parentFrameId}_child_loaded`);
-
-            //DisplayGallery.loadImages(parentFrameId);
         });
     }
 
@@ -114,8 +152,9 @@ export default class DisplayGallery {
      * Load Images
      * @param {String} frameId 
      * @param {String} parentFrameId 
+     * @param {Number} offset 
      */
-    static loadImages(frameId, parentFrameId) {
+    static loadImages(frameId, parentFrameId, offset) {
         let moduleFrameId = parentFrameId.split('_')[0];
 
         let uploadData = {};
@@ -124,6 +163,7 @@ export default class DisplayGallery {
 
         uploadData['newItemId'] = changeItem['Id'];
         uploadData['newItemColumn'] = changeItem['IdColumn'];
+        uploadData['Offset'] = offset;
 
         $.ajax({
             type: "POST",
@@ -132,8 +172,7 @@ export default class DisplayGallery {
             success: function (result) {
                 console.log(JSON.stringify(result));
 
-                let images = result.Images;
-                DisplayGallery.createContent(images, frameId);
+                DisplayGallery.createContent(result, frameId, parentFrameId, offset);
             },
             dataType: 'json'
         });

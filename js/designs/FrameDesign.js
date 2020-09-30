@@ -23,7 +23,7 @@ export default class FrameDesign {
             <div id="tab_i_${tabId}" class="menu-item display-flex flex-column ${active}">
                 <div class="text-center">
                     <div>
-                        <div class="${icon} item-icon"></div>
+                        <i class="${icon} item-icon"></i>
                     </div>
                     <div>
                         <h6 class="menu-item-text unselectable">${title}</h6>

@@ -39,9 +39,10 @@ export default class LoadFrame {
         document.getElementById('content').innerHTML = '';
 
         let isFirst = true;
-        for (const tabId in data) {
-            if (data.hasOwnProperty(tabId)) {
-                const entry = data[tabId];
+        for (const place in data) {
+            if (data.hasOwnProperty(place)) {
+                const entry = data[place];
+                let tabId = entry.TabId;
 
                 //main tabs
                 let html = FrameDesign.tabMenuItem(
@@ -156,9 +157,10 @@ export default class LoadFrame {
      */
     static addClickEvents(data) {
         //Click events for tabs
-        for (const tabId in data) {
-            if (data.hasOwnProperty(tabId)) {
-                const entry = data[tabId];
+        for (const place in data) {
+            if (data.hasOwnProperty(place)) {
+                const entry = data[place];
+                let tabId = entry.TabId;
 
                 //Modules of tab
                 let modules = entry['Modules'];
