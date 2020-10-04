@@ -30,11 +30,6 @@ class AddTable
         $cTQueary->execute();
         $cTData = $cTQueary->fetchAll(PDO::FETCH_ASSOC);
 
-        $ctResult = "";
-        foreach ($cTData as $cTRow) {
-            $ctResult .= ", c_" . $cTRow['c_5_id'] . "_fk INT(11) NULL, INDEX fk_" . $cTRow['c_5_id'] . " (c_" . $cTRow['c_5_id'] . "_fk), FOREIGN KEY (c_" . $cTRow['c_5_id'] . "_fk) REFERENCES " . $cTRow['TableName'] . "(" . $cTRow['TableIdName'] . ") ON DELETE SET NULL";
-        }
-
         //Upload to list
         $finalSQL = "INSERT INTO `t_5`(`c_31`) VALUES ('$tName');";
         $finalQueary = $this->pdo->prepare($finalSQL);
@@ -44,9 +39,40 @@ class AddTable
         $tableName = "t_$lastId";
         $tableIdName = "c_$lastId" . "_id";
 
+        $ctResult = "";
+        $aKResult = "";
+        $aCResult = "";
+        $first = true;
+        foreach ($cTData as $cTRow) {
+            //$ctResult .= ", c_" . $cTRow['c_5_id'] . "_fk INT(11) DEFAULT NULL, INDEX fk_" . $cTRow['c_5_id'] . " (c_" . $cTRow['c_5_id'] . "_fk), FOREIGN KEY (c_" . $cTRow['c_5_id'] . "_fk) REFERENCES " . $cTRow['TableName'] . "(" . $cTRow['TableIdName'] . ") ON DELETE SET NULL";
+            $fkTable = "t_" . $cTRow['c_5_id'];
+            $fkName = "c_" . $cTRow['c_5_id'] . "_fk";
+            $fkIdName = "c_" . $cTRow['c_5_id'] . "_id";
+
+            $ctResult .= ", $fkName INT(11) DEFAULT NULL";
+            $aKResult .= ", ADD KEY `$fkName` (`$fkName`)";
+
+            $constraintName = $tableName . "_ibfk_1";
+            if ($first) {
+                $aCResult .= "ALTER TABLE `$tableName` ";
+                $$first = false;
+            } else {
+                $aCResult .= ", ";
+            }
+
+            $aCResult .= "ADD CONSTRAINT `$constraintName` FOREIGN KEY (`$fkName`) REFERENCES `$fkTable` (`$fkIdName`)";
+        }
+
         //Create table
-        $newTableSQL = "CREATE table $tableName(
-            $tableIdName INT( 11 ) AUTO_INCREMENT PRIMARY KEY" . $ctResult . ");";
+        $newTableSQL = "CREATE TABLE `$tableName` (
+            `$tableIdName` INT(11) NOT NULL" . $ctResult . ");";
+        //Constrains
+        $newTableSQL .= "ALTER TABLE `$tableName`
+                            ADD PRIMARY KEY (`$tableIdName`) 
+                            $aKResult;
+                            $aCResult;
+                        COMMIT;";
+        
         $this->pdo->exec($newTableSQL);
 
         //Update list by id

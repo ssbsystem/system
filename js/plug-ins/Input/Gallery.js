@@ -1,5 +1,6 @@
 import AutoScroll from "../AutoScroll.js";
 import DataURLToBlob from "../objects/DataURLToBlob.js";
+import HeaderInfo from "../objects/HeaderInfo.js";
 
 export default class Gallery {
     /**
@@ -173,6 +174,8 @@ export default class Gallery {
         let changeData = {};
         changeData.Add = [];
         $(`#${frameId}_add_input`).bind('change', function () {
+            HeaderInfo.Create('Képek feltöltése...', 'i');
+
             let files = document.getElementById(`${frameId}_add_input`).files;
             let fLength = files.length;
             for (let i = 0; i < fLength; i++) {
@@ -239,16 +242,9 @@ export default class Gallery {
                                 }
                             }
 
-                            //if (tableResultData['Result'] === 'S') {
-                            if (true) {
+                            if (i === fLength - 1) {
+                                HeaderInfo.End('Kész');
                                 $(`#${parentFrameId}`).trigger(`${parentFrameId}_save_end`);
-                            } else {
-                                Swal.fire({
-                                    type: 'error',
-                                    title: 'Sikertelen',
-                                    text: 'A galéria feltöltése sikertelen volt!',
-                                    heightAuto: false
-                                });
                             }
                         },
                         dataType: 'json'
