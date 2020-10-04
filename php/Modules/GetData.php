@@ -5,6 +5,8 @@
  */
 class GetData
 {
+    private $findRelationship;
+
     /**
      * Get data
      */

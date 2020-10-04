@@ -56,7 +56,7 @@ export default class FrameDesign {
         let isDev = localStorage.getItem('DevelopMode') === 'true';
 
         let readyHTML = `<div class="finance-shell display-flex flex-column full-screen">`;
-        let tabHTML = `<div class="display-flex flex-row">`;
+        let tabHTML = `<div class="display-flex flex-row subtabs-shell">`;
         let mdlHTML = `<div id="tab_${tabId}_mdl" class="flex-fill full-screen">`;
 
         let isFirst = true;

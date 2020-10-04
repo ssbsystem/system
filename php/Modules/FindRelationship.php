@@ -16,11 +16,13 @@ class FindRelationship
 
     function getRelationships()
     {
-        $finalSQL = 'SELECT (@row_number:=@row_number + 1) AS RelationshipId,  TABLE_NAME, COLUMN_NAME, 
+        $database = $_SERVER['Database'];
+
+        $finalSQL = "SELECT (@row_number:=@row_number + 1) AS RelationshipId,  TABLE_NAME, COLUMN_NAME, 
                             REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
                         FROM information_schema.KEY_COLUMN_USAGE, (SELECT @row_number:=-1) AS t
-                        WHERE CONSTRAINT_SCHEMA="ssbsyste_ssbs" AND TABLE_SCHEMA="ssbsyste_ssbs" 
-                            AND REFERENCED_TABLE_SCHEMA="ssbsyste_ssbs"';
+                        WHERE CONSTRAINT_SCHEMA='$database' AND TABLE_SCHEMA='$database' 
+                            AND REFERENCED_TABLE_SCHEMA='$database'";
         return $this->pdo->query($finalSQL)->fetchAll(PDO::FETCH_ASSOC);;
     }
 

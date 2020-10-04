@@ -325,13 +325,13 @@ iframe[seamless] {
 }
 
 #main_menu {
-    width: 180px;
+    width: 200px;
     height: 100%;
+    position: relative;
     overflow-y: auto;
     overflow-x: hidden;
     z-index: 900;
     background: #fff;
-    border-right: 1px solid #cfd3e6;
     -ms-overflow-style: none;
     /* IE and Edge */
     scrollbar-width: none;
@@ -340,6 +340,15 @@ iframe[seamless] {
 
 #main_menu::-webkit-scrollbar {
     display: none;
+}
+
+.fixed-menu-item {
+    position: absolute;
+    height: 100%;
+    top: 0;
+    width: 90%;
+    z-index: 500;
+    border-right: 1px solid #cfd3e6;
 }
 
 #content_frame {
@@ -366,15 +375,17 @@ iframe[seamless] {
 
 .menu-item {
     background: #FFFEFC;
-    width: 100%;
+    width: 90%;
     height: 20%;
     position: relative;
+    border-right: 1px solid #cfd3e6;
     justify-content: center;
     color: #01043F;
+    z-index: 900;
 }
 
 .menu-item:hover {
-    width: 110%;
+    width: 100%;
     border-radius: 5%;
     border: 1px solid #ddd;
     color: #0067A5;
@@ -383,7 +394,7 @@ iframe[seamless] {
 }
 
 .menu-item-active {
-    width: 110%;
+    width: 100%;
     border-radius: 5%;
     border: 1px solid #ddd;
     color: #0067A5;
@@ -702,7 +713,11 @@ iframe[seamless] {
 }
 
 .finance-shell {
-    padding: 0 3px 0 1%
+    padding: 0;
+}
+
+.subtabs-shell {
+    padding-right: 10px;
 }
 
 #finanace_diagrams {
@@ -852,7 +867,7 @@ iframe[seamless] {
         font-size: 40px;
     }
     #main_menu {
-        width: 130px;
+        width: 145px;
     }
     .menu-item-text {
         font-size: 14px;
@@ -923,6 +938,9 @@ iframe[seamless] {
         width: 100%;
         border-radius: initial;
         border: none;
+    }
+    .fixed-menu-item {
+        display: none;
     }
     #content_shell {
         padding-bottom: 60px;
