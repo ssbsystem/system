@@ -36,16 +36,8 @@ if (isset($_SESSION['LoggedIn'])) {
 </head>
 
 <body id="body" class="display-flex flex-column">
-    <header id="page_header" class="display-flex">
-        <div class="header-item flex-1">
-
-        </div>
-        <div class="header-item flex-1">
-
-        </div>
-        <div class="header-item flex-1">
-
-        </div>
+    <header id="page_header" class="display-flex info-back">
+        <div id="page_header_title" class="full-width text-center"></div>
     </header>
     <div id="content_frame" class="flex-1 display-flex flex-row">
         <div id="main_menu">

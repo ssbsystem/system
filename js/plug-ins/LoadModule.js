@@ -1,3 +1,4 @@
+import HeaderInfo from './objects/HeaderInfo.js';
 /** LoadModule.js */
 /** Imports */
 import SwitchPlugin from './SwitchPlugin.js';
