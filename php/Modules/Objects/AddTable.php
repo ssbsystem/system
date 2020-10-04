@@ -65,14 +65,14 @@ class AddTable
 
         //Create table
         $newTableSQL = "CREATE TABLE `$tableName` (
-            `$tableIdName` INT(11) NOT NULL" . $ctResult . ");";
+            `$tableIdName` INT(11) NOT NULL" . $ctResult . ") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
         //Constrains
         $newTableSQL .= "ALTER TABLE `$tableName`
                             ADD PRIMARY KEY (`$tableIdName`) 
                             $aKResult;
                             $aCResult;
                         COMMIT;";
-        
+
         $this->pdo->exec($newTableSQL);
 
         //Update list by id
