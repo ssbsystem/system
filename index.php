@@ -41,7 +41,7 @@ if (isset($_SESSION['LoggedIn'])) {
     </header>
     <div id="content_frame" class="flex-1 display-flex flex-row">
         <div id="main_menu">
-
+            <div id="tab_i_110" class="fixed-menu-item display-flex flex-column"></div>
         </div>
         <div id="content_shell" class="flex-1">
             <div id="content">

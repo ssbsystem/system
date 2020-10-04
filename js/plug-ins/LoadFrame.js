@@ -35,7 +35,6 @@ export default class LoadFrame {
     }
 
     static loadTabs(data) {
-        document.getElementById('main_menu').innerHTML = '';
         document.getElementById('content').innerHTML = '';
 
         let isFirst = true;
