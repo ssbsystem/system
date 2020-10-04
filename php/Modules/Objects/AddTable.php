@@ -70,7 +70,9 @@ class AddTable
         $newTableSQL .= "ALTER TABLE `$tableName`
                             ADD PRIMARY KEY (`$tableIdName`) 
                             $aKResult;
-                            $aCResult;
+                            ALTER TABLE `$tableName`
+                                MODIFY `$tableIdName` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+                        $aCResult;
                         COMMIT;";
 
         $this->pdo->exec($newTableSQL);
