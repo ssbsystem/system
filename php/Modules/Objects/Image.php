@@ -39,7 +39,8 @@ class Image
 
     public function scaleImage($maxWidth, $maxHeight)
     {
-        list($width, $height) = getimagesize($this->image);
+        $width = imagesx($this->image);
+        $height = imagesy($this->image);
 
         $hRatio = $height / $maxHeight;
         $wRatio = $width / $maxWidth;
@@ -79,6 +80,11 @@ class Image
 
         $base64File = ob_get_clean();
         return $base64File;
+    }
+
+    public function saveToServer($fileName)
+    {
+        file_put_contents($fileName, $this->getBase64File());
     }
 
     /**
