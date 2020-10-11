@@ -30,9 +30,15 @@ class InsertImage
                     c_112_id,
                     c_80 AS isGallery,
                     c_81 AS galleryURL,
+                    c_96 AS 'Number',
                     c_108_fk
-                FROM t_112 LEFT JOIN $table ON $table.c_112_FK=t_112.c_112_id
-                WHERE $table.$column = :id";
+                FROM t_112 
+                LEFT JOIN t_113 
+                ON t_112.c_113_fk=t_113.c_113_id
+                LEFT JOIN $table 
+                ON $table.c_113_fk=t_113.c_113_id
+                WHERE $table.$column = :id
+                AND c_96=1";
 
         $statement = $this->pdo->prepare($query);
         $statement->execute(
@@ -57,7 +63,12 @@ class InsertImage
                 mkdir("uploads/img/desc/$entryDir");
             }
 
-            $this->insertDataToDB($path, $cardId, $table, $column);
+            $sql = "INSERT INTO t_113 (`c_113_id`) VALUES (?)";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([null]);
+            $c113Id = $this->pdo->lastInsertId();
+
+            $this->insertDataToDB($path, $cardId, $table, $column, $c113Id, 1);
 
             if ($this->isMobile) {
                 if (!file_exists("uploads/img/mob")) {
@@ -68,7 +79,7 @@ class InsertImage
                     mkdir("uploads/img/mob/$entryDir");
                 }
 
-                $this->insertDataToDB($pathM, $cardId, $table, $column);
+                $this->insertDataToDB($pathM, $cardId, $table, $column, $c113Id, 2);
             }
         }
 
@@ -82,18 +93,17 @@ class InsertImage
         return $main_data;
     }
 
-    function insertDataToDB($path, $cardId, $table, $column)
+    function insertDataToDB($path, $cardId, $table, $column, $c113Id, $num)
     {
-        $sql = "INSERT INTO t_112 (c_80, c_81, c_108_fk) VALUES (?,?,?)";
+        $sql = "INSERT INTO t_112 (c_80, c_81, c_96, c_108_fk, c_113_fk) VALUES (?,?,?,?,?)";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([true, $path, null]);
-        $lastId = $this->pdo->lastInsertId();
+        $stmt->execute([true, $path, $num, null, $c113Id]);
 
         $params = [
-            'c_112_fk' => $lastId,
+            'c_113_fk' => $c113Id,
             'cardId' => $cardId
         ];
-        $sql = "UPDATE $table SET c_112_fk=:c_112_fk WHERE $column=:cardId";
+        $sql = "UPDATE $table SET c_113_fk=:c_113_fk WHERE $column=:cardId";
         $stmt = $this->pdo->prepare($sql);
 
         if ($stmt->execute($params)) {
