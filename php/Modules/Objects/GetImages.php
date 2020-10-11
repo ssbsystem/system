@@ -31,9 +31,15 @@ class GetImages
                     c_112_id,
                     c_80 AS isGallery,
                     c_81 AS galleryURL,
+                    c_96 AS 'Number',
                     c_108_fk
-                FROM t_112 LEFT JOIN $table ON $table.c_112_FK=t_112.c_112_id
-                WHERE $table.$column = :id";
+                FROM t_112 
+                LEFT JOIN t_113 
+                ON t_112.c_113_fk=t_113.c_113_id
+                LEFT JOIN $table 
+                ON $table.c_113_fk=t_113.c_113_id
+                WHERE $table.$column = :id
+                AND c_96=1";
 
         $statement = $this->pdo->prepare($query);
         $statement->execute(

@@ -5,11 +5,16 @@
  */
 class InsertImage
 {
+    private $pdo;
+    private $isMobile;
+
     function __construct()
     {
         require_once('Modules/Connect.php');
         $PDOConnect = new PDOConnect();
         $this->pdo = $PDOConnect->pdo;
+
+        $this->isMobile = true;
     }
     public function Create($data)
     {
@@ -25,9 +30,15 @@ class InsertImage
                     c_112_id,
                     c_80 AS isGallery,
                     c_81 AS galleryURL,
+                    c_96 AS 'Number',
                     c_108_fk
-                FROM t_112 LEFT JOIN $table ON $table.c_112_FK=t_112.c_112_id
-                WHERE $table.$column = :id";
+                FROM t_112 
+                LEFT JOIN t_113 
+                ON t_112.c_113_fk=t_113.c_113_id
+                LEFT JOIN $table 
+                ON $table.c_113_fk=t_113.c_113_id
+                WHERE $table.$column = :id
+                AND c_96=1";
 
         $statement = $this->pdo->prepare($query);
         $statement->execute(
@@ -40,40 +51,73 @@ class InsertImage
 
         $entryDir = "$cardColumn.$cardId";
         $entryDir = str_replace(".", '-', $entryDir);
-        $path = "uploads/img/$entryDir/";
+        $path = "uploads/img/desc/$entryDir/";
+        $pathM = "uploads/img/mob/$entryDir/";
 
         if (sizeof($galleryArray) === 0) {
-            mkdir("uploads/img/$entryDir");
+            if (!file_exists("uploads/img/desc")) {
+                mkdir("uploads/img/desc");
+            }
 
-            $sql = "INSERT INTO t_112 (c_80, c_81, c_108_fk) VALUES (?,?,?)";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([true, $path, null]);
-            $lastId = $this->pdo->lastInsertId();
+            if (!file_exists("uploads/img/desc/$entryDir")) {
+                mkdir("uploads/img/desc/$entryDir");
+            }
 
-            $params = [
-                'c_112_fk' => $lastId,
-                'cardId' => $cardId
-            ];
-            $sql = "UPDATE $table SET c_112_fk=:c_112_fk WHERE $column=:cardId";
+            $sql = "INSERT INTO t_113 (`c_113_id`) VALUES (?)";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute($params);
+            $stmt->execute([null]);
+            $c113Id = $this->pdo->lastInsertId();
+
+            $this->insertDataToDB($path, $cardId, $table, $column, $c113Id, 1);
+
+            if ($this->isMobile) {
+                if (!file_exists("uploads/img/mob")) {
+                    mkdir("uploads/img/mob");
+                }
+
+                if (!file_exists("uploads/img/mob/$entryDir")) {
+                    mkdir("uploads/img/mob/$entryDir");
+                }
+
+                $this->insertDataToDB($pathM, $cardId, $table, $column, $c113Id, 2);
+            }
         }
 
         $filesData = $data['FileToUpload'];
 
         for ($i = 0; $i < sizeof($filesData); $i++) {
             $itemName = $filesData[$i];
-            $main_data[$i] = $this->uploadImage($itemName, $path);
+            $main_data[$i] = $this->uploadImage($itemName, $path, $pathM);
         }
 
         return $main_data;
     }
 
-    function uploadImage($name, $target_dir)
+    function insertDataToDB($path, $cardId, $table, $column, $c113Id, $num)
+    {
+        $sql = "INSERT INTO t_112 (c_80, c_81, c_96, c_108_fk, c_113_fk) VALUES (?,?,?,?,?)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([true, $path, $num, null, $c113Id]);
+
+        $params = [
+            'c_113_fk' => $c113Id,
+            'cardId' => $cardId
+        ];
+        $sql = "UPDATE $table SET c_113_fk=:c_113_fk WHERE $column=:cardId";
+        $stmt = $this->pdo->prepare($sql);
+
+        if ($stmt->execute($params)) {
+            return true;
+        } else {
+            return  false;
+        }
+    }
+
+    function uploadImage($name, $targetDir, $pathM)
     {
         $result = [];
         $basename = strtolower($_FILES[$name]["name"]);
-        $target_file = $target_dir . basename($basename);
+        $target_file = $targetDir . basename($basename);
 
         $uploadOk = 1;
         $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
@@ -121,6 +165,16 @@ class InsertImage
             } else {
                 $result['State'] = 'F';
                 $result['Response'][] = "Sorry, there was an error uploading your file.";
+            }
+
+            if ($this->isMobile) {
+                require_once('Modules/Objects/Image.php');;
+
+                $mobileImageFile = "$pathM/" . pathinfo($target_file)['basename'];
+
+                $mobileImage = new Image($target_file);
+                $mobileImage->scaleImage(900, 900);
+                $mobileImage->saveToServer($mobileImageFile);
             }
         }
 

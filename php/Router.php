@@ -129,8 +129,8 @@ switch ($module) {
         require_once('Modules/Objects/GetOneImage.php');
 
         //Call upload function
-        $getImages = new GetOneImage();
-        $main_data =  $getImages->Create($data['ImageURL']);
+        $getImages = new GetOneImage($data['ImageURL']);
+        $main_data =  $getImages->Create();
 
         print_r(json_encode($main_data));
         break;

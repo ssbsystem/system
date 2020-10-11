@@ -1,21 +1,34 @@
 <?php
-require_once("Modules/Objects/ImagetoBlob.php");
+require_once("Modules/Objects/Image.php");
 
 /**
  * Get One Image
  */
 class GetOneImage
 {
-    function __construct()
+    private $imgUrl;
+
+    function __construct($imgUrl)
     {
-        require_once('Modules/Connect.php');
-        $PDOConnect = new PDOConnect();
-        $this->pdo = $PDOConnect->pdo;
+        $this->imgUrl = $imgUrl;
     }
 
-    public function Create($imgUrl)
+    public function Create()
     {
-        $imageToBlob = new ImagetoBlob();
-        return $imageToBlob->Create($imgUrl);
+        $result = array();
+
+        $info = pathinfo($this->imgUrl);
+        $extension = $info['extension'];
+        $fileName = $info['basename'];
+
+        $image = new Image($this->imgUrl);
+        $image->scaleImage(400, 400);
+        $base64 = $image->getBase64File();
+
+        $blobString = 'data:image/' . $extension . ';base64,' . base64_encode($base64);
+
+        $result['BlobString'] = $blobString;
+        $result['Alt'] = $fileName;
+        return $result;
     }
 }
