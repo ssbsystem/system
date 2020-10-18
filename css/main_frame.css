@@ -846,6 +846,16 @@ iframe[seamless] {
     border-image-source: linear-gradient(to right, #2b416b, #8328a7);
     color: #2b416b;
 }
+.more-img-button{
+    box-shadow: 0 0 0.15rem rgba(0, 0, 0, .11), 0 0.5rem 0.35rem rgba(0, 0, 0, 0.24);
+    width: 95%;
+    height: 35px;
+    margin: 4px;
+    border-radius: 0.25rem;
+    background: #fff 50%;
+    transition: all .2s ease;
+    border: none;
+}
 
 .dev-btn:focus, .dev-btn:hover, .dev-btn:active {
     background-image: linear-gradient(to right, #8228a6, #2d416c);

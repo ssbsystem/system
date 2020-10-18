@@ -127,7 +127,7 @@ export default class Gallery {
         if (state === 'more') {
             document.getElementById(`${frameId}_cont`).insertAdjacentHTML(
                 'beforeend',
-                `<button id="${frameId}_more_img">More</button>`
+                `<button id="${frameId}_more_img" class="more-img-button">More</button>`
             );
 
             document.getElementById(`${frameId}_more_img`).addEventListener(

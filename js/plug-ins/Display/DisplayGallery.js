@@ -99,7 +99,7 @@ export default class DisplayGallery {
         if (state === 'more') {
             frameElement.insertAdjacentHTML(
                 'beforeend',
-                `<button id="${frameId}_more_img">More</button>`
+                `<button id="${frameId}_more_img" class="more-img-button">More</button>`
             );
 
             document.getElementById(`${frameId}_more_img`).addEventListener(
