@@ -110,7 +110,7 @@ class SendEmail
 				$mail->Port = 465;								//Sets the default SMTP server port
 				$mail->SMTPAuth = true;							//Sets SMTP authentication. Utilizes the Username and Password variables
 				$mail->Username = 'info@ssbsystem.com';					//Sets SMTP username
-				$mail->Password = 'Fradi2020BLGyőztes';					//Sets SMTP password
+				$mail->Password = 'Fradi2021BLGyőztes';					//Sets SMTP password
 				$mail->SMTPSecure = 'ssl';							//Sets connection prefix. Options are "", "ssl" or "tls"
 				$mail->setFrom('info@ssbsystem.com', 'SSB System');
 				$mail->addAddress($data->user_email, $data->user_name);		//Adds a "To" address			
