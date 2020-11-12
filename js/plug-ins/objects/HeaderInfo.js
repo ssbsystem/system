@@ -31,8 +31,8 @@ export default class HeaderInfo {
     /**
      * End
      */
-    static End(text) {
-        HeaderInfo.Create(text, 's');
+    static End(text, state) {
+        HeaderInfo.Create(text, state);
 
         setTimeout(function () {
             $(`#page_header`).hide();

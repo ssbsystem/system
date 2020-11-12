@@ -261,6 +261,8 @@ export default class Gallery {
                                     text: errorText,
                                     heightAuto: false
                                 });
+
+                                HeaderInfo.End('Sikertelen', 'e');
                                 return;
                             }
 
@@ -278,7 +280,7 @@ export default class Gallery {
                             Gallery.addRemoveImageEvent(frameId, maxImgId);
 
                             if (i === fLength - 1) {
-                                HeaderInfo.End('Kész');
+                                HeaderInfo.End('Kész', 's');
                                 $(`#${parentFrameId}`).trigger(`${parentFrameId}_save_end`);
                             }
                         },
