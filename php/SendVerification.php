@@ -3,8 +3,8 @@ session_start();
 
 if (!isset($_POST['Email']) || !isset($_POST['NewPassword'])) {
 	// Could not get the data that should have been sent.
-	die ('Something went wrong...');
-}else{
+	die('Something went wrong...');
+} else {
 	$emailAddress = $_POST['Email'];
 	$newPassword = $_POST['NewPassword'];
 }
@@ -44,37 +44,35 @@ $statement->execute(
 );
 
 $no_of_row = $statement->rowCount();
-if($no_of_row == 0)
-{
-    $main_data['EmailSent'] = FALSE;
+if ($no_of_row == 0) {
+	$main_data['EmailSent'] = FALSE;
 	$main_data['Message'] = 'Email címe nincs felvéve a rendszerbe. Lépjen kapcsolatba a rendszergazdával!';
-}else
-{
-    
-	$user_actcode_seed = rand(100000,999999);
+} else {
+
+	$user_actcode_seed = rand(100000, 999999);
 	$user_activation_code = hash('sha256', $user_actcode_seed);
-	
-    foreach ($statement as $result) {
-        $userFName = $result['FirstName'];
-    }
-	
+
+	foreach ($statement as $result) {
+		$userFName = $result['FirstName'];
+	}
+
 	$insert_query = "
 	UPDATE t_200
 	SET c_77 = :user_activation_code, c_78=0
     WHERE c_76 = :user_email
 	";
-	
+
 	$statement = $pdo->prepare($insert_query);
-	
+
 	$statement->execute(
 		array(
 			':user_email'			=>	$emailAddress,
 			':user_activation_code'	=>	$user_activation_code
 		)
 	);
-	
+
 	//$result = $statement->fetchAll();
-	
+
 
 	/*$mail_body = "
 	<p>Hi $userFName,</p>
@@ -84,20 +82,20 @@ if($no_of_row == 0)
 	";*/
 
 	$host = $_SERVER['HTTP_HOST'];
-	if ($host=="localhost") {
+	if ($host == "localhost") {
 		$testlink = 'localhost/login.php?act_code=' . $user_activation_code . '&new_pass=' . $newPassword;
 		$main_data['Message'] = 'Verification link: ' . $testlink;
 		$main_data['EmailSent'] = TRUE;
-	}else {
+	} else {
 		require_once('EmailTemplates.php');
 		$emailTemplates = new EmailTemplates();
 
 		$baseURL = "https://$host/login.php?act_code=$user_activation_code&new_pass=$newPassword";
 
 		$mail_body = $emailTemplates->verification($userFName, $baseURL);
-		
+
 		$mail = new PHPMailer;
-		
+
 		$mail->CharSet = 'UTF-8';
 		$mail->Encoding = 'base64';
 		$mail->IsSMTP();								//Sets Mailer to send message using SMTP
@@ -113,18 +111,14 @@ if($no_of_row == 0)
 		$mail->IsHTML(true);							//Sets message type to HTML				
 		$mail->Subject = 'Email hitelesítés';			//Sets the Subject of the message
 		$mail->Body = $mail_body;							//An HTML or plain text message body
-		
-		if($mail->Send())								//Send an Email. Return true on success or false on error
+
+		if ($mail->Send())								//Send an Email. Return true on success or false on error
 		{
 			$main_data['EmailSent'] = TRUE;
 			$main_data['Message'] = 'Email elküdlve, nézze meg bejövő üzeneteit.';
 		}
 	}
-	
-	
-
 }
 
 $json = json_encode($main_data);
 print_r($json);
-        

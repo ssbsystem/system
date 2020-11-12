@@ -161,6 +161,8 @@ class InsertImage
         } else {
             if (move_uploaded_file($_FILES[$name]["tmp_name"], $target_file)) {
                 $result['State'] = 'S';
+                $result['FilePath'] = $target_file;
+                $result['FileName'] = basename($_FILES[$name]["name"]);
                 $result['Response'][] = "The file " . basename($_FILES[$name]["name"]) . " has been uploaded.";
             } else {
                 $result['State'] = 'F';

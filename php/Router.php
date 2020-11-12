@@ -134,6 +134,17 @@ switch ($module) {
 
         print_r(json_encode($main_data));
         break;
+
+    case 'RemoveImage':
+        //Includes
+        require_once('Modules/Objects/RemoveImage.php');
+
+        //Call upload function
+        $removeImage = new RemoveImage($data['ImageURL']);
+        $main_data =  $removeImage->Remove();
+
+        print_r(json_encode($main_data));
+        break;
     default:
         # code...
         break;

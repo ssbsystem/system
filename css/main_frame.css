@@ -293,6 +293,7 @@ iframe[seamless] {
     color: #d10000;
     border-radius: 3px;
     text-transform: capitalize;
+    display: none;
 }
 
 .delete-btn-1:hover {
@@ -846,7 +847,8 @@ iframe[seamless] {
     border-image-source: linear-gradient(to right, #2b416b, #8328a7);
     color: #2b416b;
 }
-.more-img-button{
+
+.more-img-button {
     box-shadow: 0 0 0.15rem rgba(0, 0, 0, .11), 0 0.5rem 0.35rem rgba(0, 0, 0, 0.24);
     width: 95%;
     height: 35px;
@@ -861,6 +863,20 @@ iframe[seamless] {
     background-image: linear-gradient(to right, #8228a6, #2d416c);
     color: #fff;
     outline: none;
+}
+
+.gallery-delete-item {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 17px;
+    padding: 5px;
+    color: #bb0000;
+    background: #fffffff1;
+    /* box-shadow: inset 2px 4px 7px 4px #fff; */
+    width: 27px;
+    border-radius: 26px;
+    cursor: pointer;
 }
 
 @media only screen and (min-width: 992px) {
@@ -908,7 +924,7 @@ iframe[seamless] {
     }
     .fixededitbutton {
         bottom: 6%;
-        left: 20%;
+        left: 23%;
     }
 }
 

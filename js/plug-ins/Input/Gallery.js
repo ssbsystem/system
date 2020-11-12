@@ -95,10 +95,7 @@ export default class Gallery {
         }
 
         for (const imageData of images) {
-            document.getElementById(`${frameId}_cont`).insertAdjacentHTML(
-                'beforeend',
-                Gallery.getImage(frameId, imageData)
-            );
+            Gallery.getImage(frameId, imageData)
 
             let uploadData = {};
             let className = 'GetOneImage';
@@ -148,12 +145,18 @@ export default class Gallery {
     static getImage(frameId, imageData) {
         let imgId = imageData.IdNo;
         let imgAlt = imageData.Basename;
+        let fullName = imageData.URL;
 
-        return `
-            <div id=${frameId}_${imgId} class="gallery-image-content display-flex flex-column justify-content-center" alt="${imgAlt}">
+        document.getElementById(`${frameId}_cont`).insertAdjacentHTML(
+            'beforeend',
+            `<div id=${frameId}_${imgId} full-name="${fullName}" class="gallery-image-content display-flex flex-column justify-content-center" alt="${imgAlt}">
                 <p class="position-absolute">${imgAlt}</p>
-            </div>
-            `;
+                <i class="fas fa-times gallery-delete-item"></i>
+            </div>`
+        );
+
+        //Events
+        Gallery.addRemoveImageEvent(frameId, imgId);
     }
 
     /**
@@ -186,16 +189,23 @@ export default class Gallery {
                 let reader = new FileReader();
 
                 reader.onloadend = function () {
-                    let imgObj = {};
-                    imgObj.FileName = file.name;
-                    imgObj.Source = reader.result;
-                    changeData.Add.push(imgObj);
+                    /*
+                                        document.getElementById(`${frameId}_cont`).insertAdjacentHTML(
+                                            'beforeend',
+                                            `<div class="gallery-item-shell display-flex flex-column  justify-content-center">
+                                                <a href="${url}" target="_blank"><img class="gallery-item" src="${url}"></a><div>`
+                                        );*/
+                    let maxImgId = 0;
+                    $(`#${frameId}_cont .gallery-image-content`).each(function (i) {
+                        let id = this.id;
+                        let sId = id.split('_');
+                        let imgId = parseInt(sId[sId.length - 1]);
 
-                    document.getElementById(`${frameId}_cont`).insertAdjacentHTML(
-                        'beforeend',
-                        `<div class="gallery-item-shell display-flex flex-column  justify-content-center">
-                            <a href="${url}" target="_blank"><img class="gallery-item" src="${url}"></a><div>`
-                    );
+                        if (imgId > maxImgId) {
+                            maxImgId = imgId;
+                        }
+                    });
+                    maxImgId++;
 
                     let moduleFrameId = parentFrameId.split('_')[0];
                     let detailsIdData = JSON.parse(localStorage.getItem(`${moduleFrameId}_data_details_id`));
@@ -233,14 +243,39 @@ export default class Gallery {
                         processData: false,
                         cache: false,
                         success: function (result) {
-                            let tableResultData = {};
+                            let imageData = {};
                             console.log(result);
 
-                            for (const table in result[0]) {
-                                if (result[0].hasOwnProperty(table)) {
-                                    tableResultData = result[0][table];
+                            imageData = result[0]
+
+                            if (imageData.State === 'F') {
+                                let errorText = '';
+
+                                for (const respText of imageData.Response) {
+                                    errorText += respText;
                                 }
+
+                                Swal.fire({
+                                    type: 'error',
+                                    title: 'Hiba a feltöltésnél!',
+                                    text: errorText,
+                                    heightAuto: false
+                                });
+                                return;
                             }
+
+                            let fileName = imageData.FileName;
+                            let filePath = imageData.FilePath;
+
+                            document.getElementById(`${frameId}_cont`).insertAdjacentHTML(
+                                'beforeend',
+                                `<div id="${frameId}_${maxImgId}" full-name="${filePath}" style="background: url(${imageURL}) no-repeat center center;" class="gallery-image-content display-flex flex-column justify-content-center" alt="${fileName}">
+                                    <p class="position-absolute">${fileName}</p>
+                                    <i class="fas fa-times gallery-delete-item"></i>
+                                </div>`
+                            );
+
+                            Gallery.addRemoveImageEvent(frameId, maxImgId);
 
                             if (i === fLength - 1) {
                                 HeaderInfo.End('Kész');
@@ -256,6 +291,33 @@ export default class Gallery {
                 }
             }
             $(`#${parentFrameId}`).trigger(`${parentFrameId}_child_loaded`);
+        });
+    }
+
+    /**
+     * AddRemoveImageEvent
+     * @param {String} frameId 
+     * @param {String} imgId 
+     */
+    static addRemoveImageEvent(frameId, imgId) {
+        $(`#${frameId}_${imgId} .gallery-delete-item`).click(function () {
+            let parent = $(this).parent();
+            let url = parent.attr('full-name');
+
+            let className = 'RemoveImage',
+                uploadData = {};
+            uploadData['ImageURL'] = url;
+
+            $.ajax({
+                type: "POST",
+                url: "./php/Router.php",
+                data: { 'Module': className, 'Data': uploadData },
+                success: function (result) {
+                    console.log(result);
+                    parent.remove();
+                },
+                dataType: 'json'
+            });
         });
     }
 

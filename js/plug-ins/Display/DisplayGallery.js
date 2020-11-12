@@ -118,7 +118,6 @@ export default class DisplayGallery {
 
         return `
             <div id=${frameId}_${imgId} class="gallery-image-content display-flex flex-column justify-content-center" alt="${imgAlt}">
-                <p class="position-absolute">${imgAlt}</p>
             </div>
             `;
     }

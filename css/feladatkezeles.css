@@ -276,8 +276,8 @@
 }
 
 .gallery-image-content {
-    width: 48%;
-    padding-top: 48%;
+    width: 31%;
+    padding-top: 31%;
     position: relative;
     margin: 1%;
     background-size: cover !important;
@@ -321,5 +321,11 @@
         box-shadow: none !important;
         transform: none !important;
         transition: none !important;
+    }
+}
+
+@media (max-width: 500px) {
+    .gallery-image-content p {
+        display: none;
     }
 }
