@@ -71,6 +71,10 @@
     margin-bottom: 0;
 }
 
+.co-card-item label {
+    white-space: pre-wrap;
+}
+
 #tablemargin {
     padding-left: 30px;
 }
