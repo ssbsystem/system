@@ -1,12 +1,64 @@
 /** Imports **/
 import DateFunctions from './../plug-ins/DateFunctions.js';
-import AutoScroll from '../plug-ins/AutoScroll.js';
 import SelectInput from '../plug-ins/objects/SelectInput.js';
 
 /** 
  * Write inputs 
  */
 let FormInputs = {
+    /**
+     * Create input
+     * @param {JSON} objectItem 
+     * @param {String} shellId 
+     */
+    Create: function (objectItem, shellId) {
+        switch (objectItem.Type) {
+            case "W":
+                FormInputs.Write(
+                    objectItem,
+                    shellId
+                );
+                break;
+            case "WP":
+                FormInputs.WritePlus(
+                    objectItem,
+                    shellId
+                );
+                break;
+            case "RT":
+                FormInputs.RichText(
+                    objectItem,
+                    shellId
+                );
+                break;
+            case "S":
+                FormInputs.Select(
+                    objectItem,
+                    shellId
+                );
+                break;
+            case "SN":
+                FormInputs.SelectOrNew(
+                    objectItem,
+                    shellId
+                );
+                break;
+            case "SC":
+                FormInputs.SelectColumn(
+                    objectItem,
+                    shellId
+                );
+                break;
+            case "DT":
+                FormInputs.DateTime(
+                    objectItem,
+                    shellId
+                );
+                break;
+            default:
+                break;
+        }
+    },
     /**
      * Update Inputs
      * @param {String} placeName 
@@ -181,6 +233,40 @@ let FormInputs = {
         readyHTML += '<button class="btn btn-outline-secondary" type="button" id="' + shellId + '_i_' + id + '_upl" data-place="new_' + shellId + '">';
         readyHTML += '<i class="fas fa-plus"></i>';
         readyHTML += '</button> </div></div></div></div></div>';
+
+        document.getElementById(shellId).insertAdjacentHTML('beforeend', readyHTML);
+    },
+    /**
+     * Rich text input with label
+     * @param {JSON} objectItem 
+     * @param {String} shellId 
+     */
+    RichText: function (objectItem, shellId) {
+        let id = objectItem.c_103_id,
+            name = objectItem.Name,
+            uploadName = objectItem.UploadName,
+            required = objectItem.Required,
+            visible = objectItem.Visible,
+            defaultValue = objectItem.DefaultValue,
+            tableName = objectItem.TableName,
+            columnName = objectItem.ColumnName;
+
+        if (defaultValue === null) {
+            defaultValue = '';
+        }
+
+        let visibility = '';
+        if (visible === '0') {
+            visibility = 'display-none-i';
+        }
+
+        let readyHTML = "";
+        readyHTML += `<div class="form-group input-row ${visibility}">`;
+        readyHTML += `<label for="${shellId}_${id}" class="newtask-label">${name}</label>`;
+        readyHTML += `<textarea id="${shellId}_${id}" class="newtask-formcontrol" style="height: 100px"
+            upload-name="${uploadName}" data-place="${shellId}" table-name="${tableName}" 
+            column-name="${columnName}">${defaultValue}</textarea>`;
+        readyHTML += '</div>';
 
         document.getElementById(shellId).insertAdjacentHTML('beforeend', readyHTML);
     },

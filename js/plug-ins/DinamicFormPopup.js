@@ -290,48 +290,9 @@ export default class DinamicFormPopup {
      * @param {String} shellId 
      */
     static loadFormItem(objectItem, shellId) {
-        switch (objectItem.Type) {
-            case "W":
-                FormInputs.Write(
-                    objectItem,
-                    shellId
-                );
-                break;
-            case "WP":
-                FormInputs.WritePlus(
-                    objectItem,
-                    shellId
-                );
-                break;
-            case "S":
-                FormInputs.Select(
-                    objectItem,
-                    shellId
-                );
-                break;
-            case "SN":
-                FormInputs.SelectOrNew(
-                    objectItem,
-                    shellId
-                );
-                break;
-            case "SC":
-                FormInputs.SelectColumn(
-                    objectItem,
-                    shellId
-                );
-                break;
-            case "DT":
-                FormInputs.DateTime(
-                    objectItem,
-                    shellId
-                );
-                break;
-            default:
-                break;
-        }
+        FormInputs.Create(objectItem, shellId);
     }
-    
+
     /**
      * Delete
      * @param {String} frameId 

@@ -82,11 +82,19 @@ class ModuleData
         $fUserModule = $this->pdo->query(
             "SELECT 
                 c_110_id,
-                c_200_fk,
+                t_116.c_200_fk,
                 c_6_fk,
                 c_3_fk,
                 c_72 AS 'Number'
-             FROM t_110 WHERE c_200_fk='$userId' && c_3_fk='$cModuleId' ORDER BY t_110.c_72"
+             FROM t_110 
+             INNER JOIN t_114 
+             ON t_114.c_110_fk = c_110_id
+             INNER JOIN t_115 
+             ON t_115.c_115_id = t_114.c_115_fk
+             INNER JOIN t_116 
+             ON t_116.c_115_fk = c_115_id
+             WHERE t_116.c_200_fk='$userId' && c_3_fk='$cModuleId' 
+             ORDER BY t_110.c_72"
         )->fetch(PDO::FETCH_ASSOC);
 
         return $fUserModule['c_110_id'];
