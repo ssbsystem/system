@@ -87,7 +87,7 @@ class InsertImage
 
         for ($i = 0; $i < sizeof($filesData); $i++) {
             $itemName = $filesData[$i];
-            $main_data[$i] = $this->uploadImage($itemName, $path, $pathM);
+            $main_data[$i] = $this->uploadImage($itemName, $path, $pathM, $i);
         }
 
         return $main_data;
@@ -113,7 +113,7 @@ class InsertImage
         }
     }
 
-    function uploadImage($name, $targetDir, $pathM)
+    function uploadImage($name, $targetDir, $pathM, $i)
     {
         $result = [];
         $basename = strtolower($_FILES[$name]["name"]);
@@ -126,7 +126,6 @@ class InsertImage
         $check = getimagesize($_FILES[$name]["tmp_name"]);
         if ($check !== false) {
             $result['Response'][] = "File is an image - " . $check["mime"] . ".";
-            $uploadOk = 1;
         } else {
             $result['Response'][] = "File is not an image.";
             $uploadOk = 0;
@@ -159,24 +158,39 @@ class InsertImage
             $result['Response'][] = "Sorry, your file was not uploaded.";
             // if everything is ok, try to upload file
         } else {
-            if (move_uploaded_file($_FILES[$name]["tmp_name"], $target_file)) {
+            if (!file_exists("uploads/img/temp")) {
+                mkdir("uploads/img/temp");
+            }
+
+            $tempImgFolder = 'uploads/img/temp/';
+            $tempImgFile = $tempImgFolder . $basename;
+
+            if (move_uploaded_file($_FILES[$name]["tmp_name"], $tempImgFile)) {
+                require_once('Modules/Objects/Image.php');
+                require_once('Modules/Objects/RemoveImage.php');
+
+                $mobileImage = new Image($tempImgFile);
+                $mobileImage->scaleImage(1920, 1080);
+                $mobileImage->saveToServer($target_file);
+
+                unlink($tempImgFile);
+
                 $result['State'] = 'S';
                 $result['FilePath'] = $target_file;
+                $result['FileNumber'] = $i;
                 $result['FileName'] = basename($_FILES[$name]["name"]);
                 $result['Response'][] = "The file " . basename($_FILES[$name]["name"]) . " has been uploaded.";
+
+                if ($this->isMobile) {
+                    $mobileImageFile = "$pathM/" . pathinfo($target_file)['basename'];
+
+                    $mobileImage = new Image($target_file);
+                    $mobileImage->scaleImage(900, 900);
+                    $mobileImage->saveToServer($mobileImageFile);
+                }
             } else {
                 $result['State'] = 'F';
                 $result['Response'][] = "Sorry, there was an error uploading your file.";
-            }
-
-            if ($this->isMobile) {
-                require_once('Modules/Objects/Image.php');;
-
-                $mobileImageFile = "$pathM/" . pathinfo($target_file)['basename'];
-
-                $mobileImage = new Image($target_file);
-                $mobileImage->scaleImage(900, 900);
-                $mobileImage->saveToServer($mobileImageFile);
             }
         }
 

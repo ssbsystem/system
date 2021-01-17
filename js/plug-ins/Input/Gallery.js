@@ -195,17 +195,6 @@ export default class Gallery {
                                             `<div class="gallery-item-shell display-flex flex-column  justify-content-center">
                                                 <a href="${url}" target="_blank"><img class="gallery-item" src="${url}"></a><div>`
                                         );*/
-                    let maxImgId = 0;
-                    $(`#${frameId}_cont .gallery-image-content`).each(function (i) {
-                        let id = this.id;
-                        let sId = id.split('_');
-                        let imgId = parseInt(sId[sId.length - 1]);
-
-                        if (imgId > maxImgId) {
-                            maxImgId = imgId;
-                        }
-                    });
-                    maxImgId++;
 
                     let moduleFrameId = parentFrameId.split('_')[0];
                     let detailsIdData = JSON.parse(localStorage.getItem(`${moduleFrameId}_data_details_id`));
@@ -268,6 +257,18 @@ export default class Gallery {
 
                             let fileName = imageData.FileName;
                             let filePath = imageData.FilePath;
+
+                            let maxImgId = 0;
+                            $(`#${frameId}_cont .gallery-image-content`).each(function (i) {
+                                let id = this.id;
+                                let sId = id.split('_');
+                                let imgId = parseInt(sId[sId.length - 1]);
+
+                                if (imgId > maxImgId) {
+                                    maxImgId = imgId;
+                                }
+                            });
+                            maxImgId++;
 
                             document.getElementById(`${frameId}_cont`).insertAdjacentHTML(
                                 'beforeend',
