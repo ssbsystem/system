@@ -42,6 +42,10 @@ class Image
         $width = imagesx($this->image);
         $height = imagesy($this->image);
 
+        if ($maxWidth > $width && $maxHeight > $height) {
+            return;
+        }
+
         $hRatio = $height / $maxHeight;
         $wRatio = $width / $maxWidth;
 

@@ -188,105 +188,140 @@ export default class Gallery {
 
                 let reader = new FileReader();
 
-                reader.onloadend = function () {
-                    /*
-                                        document.getElementById(`${frameId}_cont`).insertAdjacentHTML(
-                                            'beforeend',
-                                            `<div class="gallery-item-shell display-flex flex-column  justify-content-center">
-                                                <a href="${url}" target="_blank"><img class="gallery-item" src="${url}"></a><div>`
-                                        );*/
+                reader.onloadend = function (e) {
+                    let img = new Image();
+                    img.src = e.target.result;
+                    img.onload = function () {
+                        let canvas = document.createElement('canvas');
+                        let ctx = canvas.getContext('2d');
 
-                    let moduleFrameId = parentFrameId.split('_')[0];
-                    let detailsIdData = JSON.parse(localStorage.getItem(`${moduleFrameId}_data_details_id`));
+                        let maxHeight = 1080;
+                        let maxWidth = 1920;
+                        let imgHeight = img.height;
+                        let imgWidth = img.width;
 
-                    let uploadData = {};
-                    let className = 'InsertImage';
-                    let formData = new FormData();
+                        if (maxWidth > imgWidth || maxHeight > imgHeight) {
+                            let hRatio = imgHeight / maxHeight;
+                            let wRatio = imgWidth / maxWidth;
 
-                    uploadData['FileToUpload'] = [];
-                    uploadData['FileToUpload'].push(`Gallery_1`);
-                    uploadData['EntryId'] = detailsIdData;
-
-                    /** Image converter */
-                    let fileName = file.name;
-                    let imageURL = reader.result;
-                    // Split the base64 string in data and contentType
-                    let block = imageURL.split(";");
-                    // Get the content type
-                    let contentType = block[0].split(":")[1];
-                    // get the real base64 content of the file
-                    let realData = block[1].split(",")[1];
-                    // Convert to blob
-                    let blob = Gallery.b64toBlob(realData, contentType);
-
-                    formData.append('Module', className);
-                    formData.append(`Gallery_1`, blob, fileName);
-                    console.log(uploadData);
-                    formData.append('Data', JSON.stringify(uploadData));
-
-                    $.ajax({
-                        type: "POST",
-                        url: "./php/Router.php",
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        cache: false,
-                        success: function (result) {
-                            let imageData = {};
-                            console.log(result);
-
-                            imageData = result[0]
-
-                            if (imageData.State === 'F') {
-                                let errorText = '';
-
-                                for (const respText of imageData.Response) {
-                                    errorText += respText;
-                                }
-
-                                Swal.fire({
-                                    type: 'error',
-                                    title: 'Hiba a feltöltésnél!',
-                                    text: errorText,
-                                    heightAuto: false
-                                });
-
-                                HeaderInfo.End('Sikertelen', 'e');
-                                return;
+                            if (hRatio > wRatio) {
+                                imgWidth = imgWidth / hRatio;
+                                imgHeight = maxHeight;
+                            } else {
+                                imgWidth = maxWidth;
+                                imgHeight = imgHeight / wRatio;
                             }
+                        }
 
-                            let fileName = imageData.FileName;
-                            let filePath = imageData.FilePath;
+                        //canvas.width = 250;
+                        //canvas.height = canvas.width * (img.height / img.width);
+                        canvas.width = imgWidth;
+                        canvas.height = imgHeight;
 
-                            let maxImgId = 0;
-                            $(`#${frameId}_cont .gallery-image-content`).each(function (i) {
-                                let id = this.id;
-                                let sId = id.split('_');
-                                let imgId = parseInt(sId[sId.length - 1]);
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        let canvasData = canvas.toDataURL('image/jpeg');
 
-                                if (imgId > maxImgId) {
-                                    maxImgId = imgId;
+                        console.log(canvasData);
+                        /*
+                                            document.getElementById(`${frameId}_cont`).insertAdjacentHTML(
+                                                'beforeend',
+                                                `<div class="gallery-item-shell display-flex flex-column  justify-content-center">
+                                                    <a href="${url}" target="_blank"><img class="gallery-item" src="${url}"></a><div>`
+                                            );*/
+
+                        let moduleFrameId = parentFrameId.split('_')[0];
+                        let detailsIdData = JSON.parse(localStorage.getItem(`${moduleFrameId}_data_details_id`));
+
+                        let uploadData = {};
+                        let className = 'InsertImage';
+                        let formData = new FormData();
+
+                        uploadData['FileToUpload'] = [];
+                        uploadData['FileToUpload'].push(`Gallery_1`);
+                        uploadData['EntryId'] = detailsIdData;
+
+                        /** Image converter */
+                        let fileName = file.name;
+                        let imageURL = canvasData; //reader.result;
+                        // Split the base64 string in data and contentType
+                        let block = imageURL.split(";");
+                        // Get the content type
+                        let contentType = block[0].split(":")[1];
+                        // get the real base64 content of the file
+                        let realData = block[1].split(",")[1];
+                        // Convert to blob
+                        let blob = Gallery.b64toBlob(realData, contentType);
+                        console.log(blob);
+
+                        formData.append('Module', className);
+                        formData.append(`Gallery_1`, blob, fileName);
+                        console.log(uploadData);
+                        formData.append('Data', JSON.stringify(uploadData));
+
+                        $.ajax({
+                            type: "POST",
+                            url: "./php/Router.php",
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            cache: false,
+                            success: function (result) {
+                                let imageData = {};
+                                console.log(result);
+
+                                imageData = result[0]
+
+                                if (imageData.State === 'F') {
+                                    let errorText = '';
+
+                                    for (const respText of imageData.Response) {
+                                        errorText += respText;
+                                    }
+
+                                    Swal.fire({
+                                        type: 'error',
+                                        title: 'Hiba a feltöltésnél!',
+                                        text: errorText,
+                                        heightAuto: false
+                                    });
+
+                                    HeaderInfo.End('Sikertelen', 'e');
+                                    return;
                                 }
-                            });
-                            maxImgId++;
 
-                            document.getElementById(`${frameId}_cont`).insertAdjacentHTML(
-                                'beforeend',
-                                `<div id="${frameId}_${maxImgId}" full-name="${filePath}" style="background: url(${imageURL}) no-repeat center center;" class="gallery-image-content display-flex flex-column justify-content-center" alt="${fileName}">
+                                let fileName = imageData.FileName;
+                                let filePath = imageData.FilePath;
+
+                                let maxImgId = 0;
+                                $(`#${frameId}_cont .gallery-image-content`).each(function (i) {
+                                    let id = this.id;
+                                    let sId = id.split('_');
+                                    let imgId = parseInt(sId[sId.length - 1]);
+
+                                    if (imgId > maxImgId) {
+                                        maxImgId = imgId;
+                                    }
+                                });
+                                maxImgId++;
+
+                                document.getElementById(`${frameId}_cont`).insertAdjacentHTML(
+                                    'beforeend',
+                                    `<div id="${frameId}_${maxImgId}" full-name="${filePath}" style="background: url(${imageURL}) no-repeat center center;" class="gallery-image-content display-flex flex-column justify-content-center" alt="${fileName}">
                                     <p class="position-absolute">${fileName}</p>
                                     <i class="fas fa-times gallery-delete-item"></i>
                                 </div>`
-                            );
+                                );
 
-                            Gallery.addRemoveImageEvent(frameId, maxImgId);
+                                Gallery.addRemoveImageEvent(frameId, maxImgId);
 
-                            if (i === fLength - 1) {
-                                HeaderInfo.End('Kész', 's');
-                                $(`#${parentFrameId}`).trigger(`${parentFrameId}_save_end`);
-                            }
-                        },
-                        dataType: 'json'
-                    });
+                                if (i === fLength - 1) {
+                                    HeaderInfo.End('Kész', 's');
+                                    $(`#${parentFrameId}`).trigger(`${parentFrameId}_save_end`);
+                                }
+                            },
+                            dataType: 'json'
+                        });
+                    }
                 }
 
                 if (file) {
