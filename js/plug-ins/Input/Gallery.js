@@ -200,7 +200,7 @@ export default class Gallery {
                         let imgHeight = img.height;
                         let imgWidth = img.width;
 
-                        if (maxWidth > imgWidth || maxHeight > imgHeight) {
+                        if (maxWidth < imgWidth || maxHeight < imgHeight) {
                             let hRatio = imgHeight / maxHeight;
                             let wRatio = imgWidth / maxWidth;
 
@@ -219,7 +219,7 @@ export default class Gallery {
                         canvas.height = imgHeight;
 
                         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        let canvasData = canvas.toDataURL('image/jpeg');
+                        let canvasData = canvas.toDataURL(file.type);
 
                         console.log(canvasData);
                         /*
