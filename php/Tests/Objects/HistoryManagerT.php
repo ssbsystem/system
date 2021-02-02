@@ -29,7 +29,6 @@ class HistoryManagerT implements Test
         $this->response['Name'] = 'History manager test';
         $this->response['Status'] = $this->status;
 
-
         $test1 = [];
         $test1['Status'] = Status::Success;
         $test1['Message'] = '';

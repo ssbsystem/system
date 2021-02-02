@@ -7,6 +7,7 @@
 abstract class Status
 {
     public const Success = 'success';
+    public const Information = 'information';
     public const Warning = 'warning';
     public const Error = 'error';
 

@@ -6,12 +6,13 @@
 
 abstract class SQLStatement
 {
-    const Select = 0;
-    const Insert = 1;
-    const Update = 2;
-    const Delete = 3;
-    const AddColumn = 4;
-    const DropColumn = 5;
-    const CreateTable = 6;
-    const DropTable = 7;
+    const Unknown = 'UNKNOWN';
+    const Select = 'SELECT';
+    const Insert = 'INSERT';
+    const Update = 'UPDATE';
+    const Delete = 'DELETE';
+    const AddColumn = 'ADDCOLUMN';
+    const DropColumn = 'DROPCOLUMN';
+    const CreateTable = 'CREATETABLE';
+    const DropTable = 'DROPTABLE';
 }

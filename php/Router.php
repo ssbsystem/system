@@ -1,12 +1,32 @@
 <?php
 
+/** Includes **/
+/* paths - first include in all php file */
+require_once('Enums/Path.php');
+
+/* more */
+require_once(Path::Session_php);
+require_once(Path::IndexingType_php);
+
 //Post varibles
 session_start();
-if (!isset($_SESSION['UserId'])) {
+if (!isset($_SESSION[Session::UserId])) {
     die('No session!');
 }
 
-$userId = $_SESSION['UserId'];
+if (!isset($_SESSION[Session::UserId])) {
+    die('No session!');
+}
+
+if (!isset($_SESSION[Session::IndexingType])) {
+    if ($_SERVER[Session::HTTP_HOST] == "dev.ssbsystem.com") {
+        $_SESSION[Session::IndexingType] = IndexingType::Standard;
+    } else {
+        $_SESSION[Session::IndexingType] = IndexingType::Company;
+    }
+}
+
+$userId = $_SESSION[Session::UserId];
 $module = $_POST['Module'];
 $data = $_POST['Data'];
 

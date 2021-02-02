@@ -1,10 +1,23 @@
 <?php
 
+/** Includes **/
+/* paths - first include in all php file */
+require_once('Enums/Path.php');
+
+/* more */
+require_once(Path::Message_php);
+require_once(Path::Status_php);
+require_once(Path::Insert_php);
 /**
  * Insert by structure
  */
 class InsertByParam
 {
+    //Status list
+    private $response = [
+        "Object" => "InsertByParam class"
+    ];
+
     public function DefaultUpload($data)
     {
         $main_data = array();
@@ -26,8 +39,9 @@ class InsertByParam
 
         foreach ($object as $table => $columns) {
             $finalSQL = 'INSERT INTO ' . $table;
-            $columnNames = '(';
-            $values = ' VALUES (';
+            $columnNames = '';
+            $values = '';
+            $params = [];
 
             $isFirst = true;
             foreach ($columns as $column => $value) {
@@ -38,26 +52,22 @@ class InsertByParam
                     $values .= ', ';
                 }
                 $columnNames .= $column;
-
+                /*
                 if ($value === 'null') {
                     $values .= 'null';
                 } else {
                     $values .= '"' . $value . '"';
-                }
+                }*/
+
+                $params[":$column"] = $value;
             }
 
-            $columnNames .= ')';
-            $values .= ');';
-            $finalSQL .= $columnNames . $values;
-
-            $finalQueary = $pdo->prepare($finalSQL);
-            $finalQueary->execute();
-            $lastId = $pdo->lastInsertId();
-
-            $tableIdQueary = $pdo->prepare("SHOW KEYS FROM $table WHERE Key_name = 'PRIMARY'");
-            $tableIdQueary->execute();
-            $tableIdArr = $tableIdQueary->fetchAll();
-            $tableIdColumn = $tableIdArr[0]['Column_name'];
+            $insert = new Insert();
+            $insert->setData($table, $columnNames, $params);
+            $insert->run();
+            print_r($insert->getResponse());
+            $lastId = $insert->getInsertedId();
+            $tableIdColumn = $insert->getKeyField();
 
             if ($finalQueary) {
                 $main_data[$table]['Result'] = 'S';
@@ -69,6 +79,14 @@ class InsertByParam
         }
 
         return $main_data;
+    }
+
+    /**
+     * Get the value of response
+     */
+    public function getResponse()
+    {
+        return $this->response;
     }
 }
 /*** Example ***/
